@@ -8,6 +8,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle";
 import "auth0-js/dist/auth0.min";
 
+import axios from "./plugins/axios";
+
 import AuthService from "./services/AuthService";
 
 const auth = new AuthService();
@@ -17,6 +19,8 @@ const app = createApp(App);
 app.use(router);
 
 app.use(store);
+
+app.use(axios);
 
 app.mixin({
   data() {

@@ -48,20 +48,17 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!store.getters.hasCookie) {
+    const accessToken = store.getters.accessToken;
+    if (!accessToken) {
       next({
         path: "/login",
         params: { nextUrl: to.fullPath },
       });
     } else {
       if (!store.state.isAuthenticated) {
-        next({
-          path: "/login",
-          params: { nextUrl: to.fullPath },
-        });
-      } else {
-        next();
+        store.dispatch("login", accessToken);
       }
+      next();
     }
   } else {
     next();

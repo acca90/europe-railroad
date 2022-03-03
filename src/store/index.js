@@ -8,15 +8,18 @@ const store = createStore({
     };
   },
   getters: {
-    hasCookie() {
+    accessToken() {
       const allCookies = document.cookie;
       const cookiMap = {};
       allCookies.split(";").forEach((cookie) => {
         const cookiePair = cookie.split("=");
-        cookiMap[cookiePair[0].trim()] = cookiePair[1].trim();
+        if (cookiePair.length) {
+          const key = cookiePair[0] || "";
+          const value = cookiePair[1] || "";
+          cookiMap[key.trim()] = value.trim();
+        }
       });
-      console.log(cookiMap);
-      return cookiMap["accessToken"];
+      return cookiMap.accessToken;
     },
   },
   mutations: {
