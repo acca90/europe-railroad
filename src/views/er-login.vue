@@ -123,6 +123,9 @@ export default {
     successHandler(resp) {
       this.login(resp.accessToken).then(() => this.$router.push("/"));
     },
+    iAmRefugee() {
+      window.open('https://forms.docq.app/?domain=ukraine.docq.app&form=a92a63d6-e639-4162-b3ee-dcbb1a6e286b', '_blank')
+    },
   },
 };
 </script>
