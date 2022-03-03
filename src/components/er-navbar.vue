@@ -27,24 +27,35 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
+          <li
+              :class="active == 'home' ? 'active' : ''"
+              class="nav-item">
             <RouterLink
               to="/"
-              class="nav-link active"
+              class="nav-link"
               aria-current="page"
               href="#"
             >
-              <b>Home</b>
+              <i class="fa fa-home"></i>
+              Home
             </RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink to="/" class="nav-link" aria-current="page" href="#">
-              <b>Drivers</b>
-            </RouterLink>
+            <button class="btn btn-xs btn-danger" aria-current="page" v-on:click="iAmRefugee()">
+              <b>I'm refugee / Я біженець</b>
+            </button>
           </li>
-          <li class="nav-item">
-            <RouterLink to="/" class="nav-link" aria-current="page" href="#">
-              <b>Refugees</b>
+          <li
+              :class="active == 'support' ? 'active' : ''"
+              class="nav-item">
+            <RouterLink
+                to="/support"
+                class="nav-link"
+                aria-current="page"
+                href="#"
+            >
+              <i class="fa fa-warning"></i>
+              Support
             </RouterLink>
           </li>
           <li class="nav-item">
@@ -53,6 +64,11 @@
             </RouterLink>
           </li>
         </ul>
+        <form class="d-flex">
+          <button class="btn btn-danger">
+            <i class="fa fa-sign-out"></i>
+          </button>
+        </form>
       </div>
     </div>
   </nav>
@@ -63,6 +79,20 @@ import { RouterLink } from "vue-router";
 
 export default {
   name: "er-navbar.vue",
+  props: {
+    active: {
+      type: String,
+      default: 'home'
+    }
+  },
+  components: {
+    RouterLink
+  },
+  methods: {
+    iAmRefugee() {
+      window.open('https://forms.docq.app/?domain=ukraine.docq.app&form=a92a63d6-e639-4162-b3ee-dcbb1a6e286b', '_blank')
+    }
+  },
   computed: {
     isAuthenticated() {
       return this.$store.state.isAuthenticated;
@@ -71,4 +101,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.router-link-active {
+  font-weight: bold;
+  color: white;
+}
+</style>

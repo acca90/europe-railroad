@@ -33,11 +33,6 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
-    // {
-    //   path: "/facebook/deauthorize",
-    //   name: "Facebook Auth",
-    //   component: erFacebookAuth,
-    // },
     {
       path: "/",
       name: "Home",

@@ -1,5 +1,7 @@
 <template>
-  <er-table></er-table>
+  <div class="container-fluid">
+    <er-table></er-table>
+  </div>
 </template>
 
 <script>

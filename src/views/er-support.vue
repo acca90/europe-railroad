@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div class="header">
       <h2>{{ txt.support }}</h2>
     </div>
@@ -62,8 +62,11 @@
   </div>
 </template>
 <script>
+
 export default {
   name: "er-support",
+  components: {
+  },
   data() {
     return {
       txt: {
