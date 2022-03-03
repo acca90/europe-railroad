@@ -3,6 +3,7 @@ import Home from "../views/er-home.vue";
 import Login from "../views/er-login.vue";
 import erFacebookAuth from "../views/er-facebook-auth.vue";
 import erFacebookCallback from "../views/er-facebook-callback.vue";
+import erSupport from "../views/er-support.vue";
 
 import store from "../store";
 
@@ -23,6 +24,11 @@ const router = createRouter({
       path: "/facebook/callback",
       name: "Facebook Auth",
       component: erFacebookCallback,
+    },
+    {
+      path: "/support",
+      name: "Support",
+      component: erSupport,
     },
     // {
     //   path: "/facebook/deauthorize",
