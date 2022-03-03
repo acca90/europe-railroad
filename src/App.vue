@@ -1,7 +1,9 @@
 <template>
-  <er-navbar v-if="isLogged" />
-  <div class="container">
-    <RouterView />
+  <div id="app">
+    <er-navbar v-if="isLogged" />
+    <div class="container">
+      <RouterView />
+    </div>
   </div>
 </template>
 
@@ -39,4 +41,5 @@ export default {
   height: 30px;
   border-radius: 50px;
 }
+
 </style>
