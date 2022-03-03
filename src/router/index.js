@@ -29,6 +29,9 @@ const router = createRouter({
       path: "/support",
       name: "Support",
       component: erSupport,
+      meta: {
+        requiresAuth: true,
+      },
     },
     // {
     //   path: "/facebook/deauthorize",

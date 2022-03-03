@@ -47,6 +47,11 @@
               <b>Refugees</b>
             </RouterLink>
           </li>
+          <li class="nav-item">
+            <RouterLink to="/support" class="nav-link" aria-current="page" href="#">
+              <b>Support</b>
+            </RouterLink>
+          </li>
         </ul>
       </div>
     </div>
