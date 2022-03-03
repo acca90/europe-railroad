@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <er-navbar />
-    <div class="container">
+    <div class="container-fluid">
       <RouterView />
     </div>
   </div>
