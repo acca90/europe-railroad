@@ -52,9 +52,12 @@ export default {
       }
     },
     errorHandler(resp) {
+      localStorage.removeItem("userToken");
       this.$router.push('/login');
     },
     successHandler(resp) {
+      console.log(JSON.stringify(resp));
+      localStorage.setItem("userToken", resp.accessToken);
       this.$router.push('/');
     },
   }
