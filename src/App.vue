@@ -1,5 +1,5 @@
 <template>
-  <er-navbar />
+  <er-navbar v-if="isLogged" />
   <div class="container">
     <RouterView />
   </div>
