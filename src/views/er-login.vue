@@ -58,15 +58,15 @@
                 LOG IN WITH FACEBOOK
               </button>
 
-              <button class="btn btn-large btn-danger custom-margin">
-                <i class="fa fa-google"></i>
-                LOG IN WITH GOOGLE
-              </button>
+<!--              <button class="btn btn-large btn-danger custom-margin">-->
+<!--                <i class="fa fa-google"></i>-->
+<!--                LOG IN WITH GOOGLE-->
+<!--              </button>-->
 
-              <button class="btn btn-large btn-dark custom-margin">
-                <i class="fa fa-apple"></i>
-                LOG IN WITH APPLE
-              </button>
+<!--              <button class="btn btn-large btn-dark custom-margin">-->
+<!--                <i class="fa fa-apple"></i>-->
+<!--                LOG IN WITH APPLE-->
+<!--              </button>-->
             </div>
           </div>
 
