@@ -1,19 +1,28 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <er-navbar />
+  <div class="container">
+    <RouterView />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import { RouterView } from 'vue-router'
+import erNavbar from "@/components/er-navbar.vue";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    erNavbar,
+    RouterView
+  },
+  data() {
+    return {
+      isLogged: false,
+    }
   }
 }
+
 </script>
 
 <style>
@@ -24,5 +33,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.flag {
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
 }
 </style>
