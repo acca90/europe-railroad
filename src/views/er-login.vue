@@ -8,16 +8,16 @@
     <div class="row">
       <div class="card col-md-8 offset-md-2 col-sm-8 offset-sm-2 col-xs-12">
         <div class="card-body">
-
           A platform to help you on find a way out from this war
-
         </div>
       </div>
     </div>
     <div class="row custom-margin">
       <div class="col-md-8 offset-md-2 col-sm-6 offset-sm-3 col-xs-12">
-
-        <button class="btn btn-large btn-primary custom-margin" v-on:click="logOnFacebook">
+        <button
+          class="btn btn-large btn-primary custom-margin"
+          v-on:click="logOnFacebook"
+        >
           <i class="fa fa-facebook"></i>
           LOG IN WITH FACEBOOK
         </button>
@@ -26,23 +26,25 @@
           <i class="fa fa-google"></i>
           LOG IN WITH GOOGLE
         </button>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "er-login",
   data() {
     return {
       isLogged: false,
-    }
+    };
   },
   methods: {
+    ...mapActions(["login", "logout"]),
     logOnFacebook() {
-      this.auth.facebook(this.facebookHandler)
+      this.auth.facebook(this.facebookHandler);
     },
     facebookHandler(errorResp, successResp) {
       if (errorResp) {
@@ -52,16 +54,14 @@ export default {
       }
     },
     errorHandler(resp) {
-      localStorage.removeItem("userToken");
-      this.$router.push('/login');
+      console.error(resp);
+      this.logout().then(() => this.$router.push("/login"));
     },
     successHandler(resp) {
-      console.log(JSON.stringify(resp));
-      localStorage.setItem("userToken", resp.accessToken);
-      this.$router.push('/');
+      this.login(resp.accessToken).then(() => this.$router.push("/"));
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

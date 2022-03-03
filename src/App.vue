@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <er-navbar v-if="isLogged" />
+    <er-navbar />
     <div class="container">
       <RouterView />
     </div>
@@ -8,23 +8,16 @@
 </template>
 
 <script>
-
-import { RouterView } from 'vue-router'
+import { RouterView } from "vue-router";
 import erNavbar from "@/components/er-navbar.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     erNavbar,
-    RouterView
+    RouterView,
   },
-  data() {
-    return {
-      isLogged: false,
-    }
-  }
-}
-
+};
 </script>
 
 <style>
@@ -41,5 +34,4 @@ export default {
   height: 30px;
   border-radius: 50px;
 }
-
 </style>

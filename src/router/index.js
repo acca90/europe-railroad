@@ -42,10 +42,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    // inicio: techo de autenticação, mudar para localadequado
-    store.dispatch('authenticate', true).then(result => console.log(result));
-    // fim: techo de autenticação, mudar para localadequado
-    if (localStorage.getItem("userToken") == null) {
+    if (!store.getters.hasCookie) {
       next({
         path: "/login",
         params: { nextUrl: to.fullPath },
@@ -64,6 +61,5 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
-
 
 export default router;

@@ -9,10 +9,8 @@ export default {
   name: "er-home.vue",
   components: {
     erTable,
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

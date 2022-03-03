@@ -1,18 +1,39 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+  <nav
+    v-if="isAuthenticated"
+    class="navbar navbar-expand-md navbar-dark fixed-top bg-primary"
+  >
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
         <div class="flag">
-          <img alt="Help Ukraine" slot="flag" class="flag" src="@/assets/flag.png">
+          <img
+            slot="flag"
+            alt="Help Ukraine"
+            class="flag"
+            src="@/assets/flag.png"
+          />
         </div>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <RouterLink to="/" class="nav-link active" aria-current="page" href="#">
+            <RouterLink
+              to="/"
+              class="nav-link active"
+              aria-current="page"
+              href="#"
+            >
               <b>Home</b>
             </RouterLink>
           </li>
@@ -27,23 +48,22 @@
             </RouterLink>
           </li>
         </ul>
-
-
-
       </div>
     </div>
   </nav>
 </template>
 
 <script>
-import { RouterLink } from 'vue-router'
+import { RouterLink } from "vue-router";
 
 export default {
-  name: "er-navbar.vue"
-}
-
+  name: "er-navbar.vue",
+  computed: {
+    isAuthenticated() {
+      return this.$store.state.isAuthenticated;
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
