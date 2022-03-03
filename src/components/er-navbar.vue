@@ -27,32 +27,27 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li
-              :class="active == 'home' ? 'active' : ''"
-              class="nav-item">
-            <RouterLink
-              to="/"
-              class="nav-link"
-              aria-current="page"
-              href="#"
-            >
+          <li :class="active == 'home' ? 'active' : ''" class="nav-item">
+            <RouterLink to="/" class="nav-link" aria-current="page" href="#">
               <i class="fa fa-home"></i>
               Home
             </RouterLink>
           </li>
           <li class="nav-item">
-            <button class="btn btn-xs btn-danger" aria-current="page" v-on:click="iAmRefugee()">
+            <button
+              class="btn btn-xs btn-danger"
+              aria-current="page"
+              v-on:click="iAmRefugee()"
+            >
               <b>I'm refugee / Я біженець</b>
             </button>
           </li>
-          <li
-              :class="active == 'support' ? 'active' : ''"
-              class="nav-item">
+          <li :class="active == 'support' ? 'active' : ''" class="nav-item">
             <RouterLink
-                to="/support"
-                class="nav-link"
-                aria-current="page"
-                href="#"
+              to="/support"
+              class="nav-link"
+              aria-current="page"
+              href="#"
             >
               <i class="fa fa-warning"></i>
               Support
@@ -60,7 +55,7 @@
           </li>
         </ul>
         <form class="d-flex">
-          <button class="btn btn-danger">
+          <button class="btn btn-danger" v-on:click.prevent="logoutApp">
             <i class="fa fa-sign-out"></i>
           </button>
         </form>
@@ -71,22 +66,30 @@
 
 <script>
 import { RouterLink } from "vue-router";
+import { mapActions } from "vuex";
 
 export default {
   name: "er-navbar.vue",
   props: {
     active: {
       type: String,
-      default: 'home'
-    }
+      default: "home",
+    },
   },
   components: {
-    RouterLink
+    RouterLink,
   },
   methods: {
+    ...mapActions(["logout"]),
     iAmRefugee() {
-      window.open('https://forms.docq.app/?domain=ukraine.docq.app&form=a92a63d6-e639-4162-b3ee-dcbb1a6e286b', '_blank')
-    }
+      window.open(
+        "https://forms.docq.app/?domain=ukraine.docq.app&form=a92a63d6-e639-4162-b3ee-dcbb1a6e286b",
+        "_blank"
+      );
+    },
+    logoutApp() {
+      this.logout().then(() => this.$router.push("/login"));
+    },
   },
   computed: {
     isAuthenticated() {
