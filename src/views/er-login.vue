@@ -17,7 +17,7 @@
     <div class="row custom-margin">
       <div class="col-md-8 offset-md-2 col-sm-6 offset-sm-3 col-xs-12">
 
-        <button class="btn btn-large btn-primary custom-margin" v-on:click="auth.facebook()">
+        <button class="btn btn-large btn-primary custom-margin" v-on:click="logOnFacebook">
           <i class="fa fa-facebook"></i>
           LOG IN WITH FACEBOOK
         </button>
@@ -39,6 +39,24 @@ export default {
     return {
       isLogged: false,
     }
+  },
+  methods: {
+    logOnFacebook() {
+      this.auth.facebook(this.facebookHandler)
+    },
+    facebookHandler(errorResp, successResp) {
+      if (errorResp) {
+        this.errorHandler(errorResp);
+      } else {
+        this.successHandler(successResp);
+      }
+    },
+    errorHandler(resp) {
+      this.$router.push('/login');
+    },
+    successHandler(resp) {
+      this.$router.push('/');
+    },
   }
 }
 </script>
