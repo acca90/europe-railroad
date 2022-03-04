@@ -76,8 +76,8 @@
         <thead>
         <tr>
           <th class="text-truncate" style="max-width: 80px">I can Help!</th>
-          <th class="text-truncate" style="max-width: 600px">Current Location</th>
-          <th class="text-truncate" style="max-width: 80px">Contact</th>
+          <th class="text-truncate" style="max-width: 300px">Current Location</th>
+          <th class="text-truncate" style="max-width: 300px">Community Center</th>
           <th class="text-truncate" style="max-width: 150px">Orig. City</th>
           <th class="text-truncate" style="max-width: 150px">Final Destination</th>
           <th class="text-truncate" style="max-width: 150px">Optional Destination</th>
@@ -96,23 +96,25 @@
               <i class="fa fa-cab"></i> Fill the form
             </a>
           </td>
-          <td class="text-truncate" style="max-width: 600px">
-            <span v-if="row.current_location_center == 'Yes'">
-              {{ row.community_center_address }}, {{ row.community_center_city }} ({{ row.community_center_country }})
-            </span>
-            <span v-else>
-              {{ row.current_address }}, {{ row.location_city }} ({{ row.location_country }})
-            </span>
+          <td class="text-truncate" style="max-width: 300px">
+            {{ row.current_address }}, {{ row.location_city }} ({{ row.location_country }})
           </td>
-          <td class="text-truncate" style="max-width: 110px">
-            <a v-if="isContactAvailable(row)"
-               class="btn btn-xs btn-warning"
-               data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-               v-on:mouseover="setContact(row)">
-              <i class="fa fa-phone"></i> Contact
-            </a>
+          <td class="text-truncate" style="max-width: 300px">
+            <div v-if="!!row.community_center_address">
+              <a v-if="isContactAvailable(row)"
+                 class="thisIsALink"
+                 data-bs-toggle="modal"
+                 data-bs-target="#staticBackdrop"
+                 v-on:mouseover="setContact(row)">
+                <i class="fa fa-phone"></i>
+                {{ row.community_center_address }}, {{ row.community_center_city }} ({{ row.community_center_country }})
+              </a>
+              <span v-else>
+                {{ row.community_center_address }}, {{ row.community_center_city }} ({{ row.community_center_country }})
+              </span>
+            </div>
             <span v-else>
-              Not Available
+              -
             </span>
           </td>
           <td class="text-truncate" style="max-width: 150px">
@@ -229,5 +231,10 @@ td {
 }
 .mt-10 {
   margin-top: 70px;
+}
+.thisIsALink:hover {
+  color: #0a53be;
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>
