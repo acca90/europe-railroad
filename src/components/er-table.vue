@@ -5,7 +5,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Community Contact Details</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Community Center Contact Details</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -18,6 +18,10 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr>
+                    <td style="width: 150px; text-align: left">Community Center</td>
+                    <td style="width: 150px; text-align: left">{{ contact.community_center_name }}</td>
+                  </tr>
                   <tr v-if="contact.community_center_contact_name">
                     <td style="width: 150px; text-align: left">
                       Person in Charge
@@ -94,7 +98,7 @@
           </td>
           <td class="text-truncate" style="max-width: 600px">
             <span v-if="row.current_location_center == 'Yes'">
-              {{ row.community_center_address }}, {{ row.community_center_city }} ({{ row.community_center_country }}) - {{ row.community_center_name }}
+              {{ row.community_center_address }}, {{ row.community_center_city }} ({{ row.community_center_country }})
             </span>
             <span v-else>
               {{ row.current_address }}, {{ row.location_city }} ({{ row.location_country }})
