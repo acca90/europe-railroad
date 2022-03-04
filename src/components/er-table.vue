@@ -1,5 +1,58 @@
 <template>
   <div>
+    <div>
+      <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Community Contact Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <table class="table table-striped table-hover table-sm">
+                <thead>
+                  <tr>
+                    <td style="width: 150px; text-align: left">Type</td>
+                    <td style="width: 150px; text-align: left">Conctact</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-if="contact.community_center_contact_name">
+                    <td style="width: 150px; text-align: left">
+                      Person in Charge
+                    </td>
+                    <td style="width: 150px; text-align: left">
+                      {{ contact.community_center_contact_name }}
+                    </td>
+                  </tr>
+                  <tr v-if="contact.community_center_phone_country_code || contact.community_center_phone_number">
+                    <td style="width: 150px; text-align: left">Phone</td>
+                    <td style="width: 150px; text-align: left">
+                      {{ contact.community_center_phone_country_code }} {{ contact.community_center_phone_number }}
+                    </td>
+                  </tr>
+                  <tr v-if="contact.community_center_email">
+                    <td style="width: 150px; text-align: left">
+                      Email
+                    </td>
+                    <td style="width: 150px; text-align: left">
+                      {{ contact.community_center_email }}
+                    </td>
+                  </tr>
+                  <tr></tr>
+                </tbody>
+              </table>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
     <div class="row mt-10">
       <div class="col-md-2 col-sm-4 col-xs-12">
         <select class="form-select form-select mb-3" v-model="filterOption">
@@ -19,15 +72,14 @@
         <thead>
         <tr>
           <th class="text-truncate" style="max-width: 80px">I can Help!</th>
-          <th class="text-truncate" style="max-width: 300px">Current Country / City</th>
+          <th class="text-truncate" style="max-width: 600px">Current Location</th>
+          <th class="text-truncate" style="max-width: 80px">Contact</th>
           <th class="text-truncate" style="max-width: 150px">Orig. City</th>
           <th class="text-truncate" style="max-width: 150px">Final Destination</th>
           <th class="text-truncate" style="max-width: 150px">Optional Destination</th>
-          <th class="text-truncate" style="max-width: 150px">Lang.</th>
-          <th class="text-truncate" style="max-width: 150px">Payed Transport</th>
-          <th class="text-truncate" style="max-width: 150px">Has Place</th>
-          <th class="text-truncate" style="max-width: 150px">Need Job</th>
-          <th class="text-truncate" style="max-width: 150px">Seats</th>
+          <th class="text-truncate" style="max-width: 150px">Language</th>
+          <th class="text-truncate" style="max-width: 150px">Can pay for transport</th>
+          <th class="text-truncate" style="max-width: 150px">Car Seats</th>
           <th class="text-truncate" style="max-width: 150px">Kids</th>
           <th class="text-truncate" style="max-width: 150px">Pets</th>
           <th class="text-truncate" style="max-width: 150px">Requested</th>
@@ -40,8 +92,24 @@
               <i class="fa fa-cab"></i> Fill the form
             </a>
           </td>
-          <td class="text-truncate" style="max-width: 150px">
-            {{ row.location_country }} ({{ row.location_city }})
+          <td class="text-truncate" style="max-width: 600px">
+            <span v-if="row.current_location_center == 'Yes'">
+              {{ row.community_center_address }}, {{ row.community_center_city }} ({{ row.community_center_country }}) - {{ row.community_center_name }}
+            </span>
+            <span v-else>
+              {{ row.current_address }}, {{ row.location_city }} ({{ row.location_country }})
+            </span>
+          </td>
+          <td class="text-truncate" style="max-width: 110px">
+            <a v-if="isContactAvailable(row)"
+               class="btn btn-xs btn-warning"
+               data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+               v-on:mouseover="setContact(row)">
+              <i class="fa fa-phone"></i> Contact
+            </a>
+            <span v-else>
+              Not Available
+            </span>
           </td>
           <td class="text-truncate" style="max-width: 150px">
             {{ row.original_city }}
@@ -60,13 +128,6 @@
             <span v-else>No</span>
           </td>
           <td class="text-truncate" style="max-width: 150px">
-            {{ row.place_to_stay }}
-          </td>
-          <td class="text-truncate" style="max-width: 150px">
-            <span v-if="row.help_to_find_job">Yes</span>
-            <span v-else>No</span>
-          </td>
-          <td class="text-truncate" style="max-width: 150px">
             {{ row.how_many_cars_seats || '-' }}
           </td>
           <td class="text-truncate" style="max-width: 150px">
@@ -80,7 +141,7 @@
           </td>
         </tr>
         <tr v-if="!tableData.length">
-          <td colspan="13">No data</td>
+          <td colspan="14">No records found</td>
         </tr>
         </tbody>
       </table>
@@ -97,6 +158,7 @@ export default {
       canRefresh: true,
       filterOption: '',
       filterValue: '',
+      contact: {},
     };
   },
   computed: {
@@ -138,6 +200,14 @@ export default {
         return true;
       }
       return term.toLowerCase().includes(this.filterValue.toLowerCase());
+    },
+    setContact(row) {
+      this.contact = row;
+    },
+    isContactAvailable(row) {
+      return !!row.community_center_email ||
+          !!row.community_center_phone_country_code ||
+          !!row.community_center_phone_number
     }
   },
   mounted() {
