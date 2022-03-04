@@ -1,7 +1,11 @@
 <template>
-  <er-navbar />
-  <div id="app">
-    <RouterView />
+  <div class="container-fluid" id="app">
+    <div class="row">
+      <er-navbar />
+    </div>
+    <div class="row justify-content-md-center">
+      <RouterView />
+    </div>
   </div>
 </template>
 

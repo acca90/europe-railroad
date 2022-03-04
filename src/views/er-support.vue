@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="col-6">
     <div class="header">
       <h2>{{ txt.support }}</h2>
     </div>

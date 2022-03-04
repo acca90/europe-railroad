@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="col-12">
     <er-table></er-table>
   </div>
 </template>
