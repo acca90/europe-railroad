@@ -63,10 +63,10 @@
                 LOG IN WITH GOOGLE
               </button>
 
-<!--              <button class="btn btn-large btn-dark custom-margin">-->
-<!--                <i class="fa fa-apple"></i>-->
-<!--                LOG IN WITH APPLE-->
-<!--              </button>-->
+              <button class="btn btn-large btn-dark custom-margin" v-on:click="logOnApple">
+                <i class="fa fa-apple"></i>
+                LOG IN WITH APPLE
+              </button>
             </div>
           </div>
 
@@ -111,6 +111,9 @@ export default {
     },
     logOnGoogle() {
       this.auth.social('google-oauth2', this.socialHandler);
+    },
+    logOnApple() {
+      this.auth.social('apple', this.socialHandler);
     },
     socialHandler(errorResp, successResp) {
       if (errorResp) {
