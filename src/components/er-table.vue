@@ -80,7 +80,7 @@
       </div>
     </div>
     <div class="row mt-2">
-      <div class="col-md-2 col-sm-4 col-xs-12">
+      <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12" >
         <select class="form-select form-select mb-3" v-model="filterOption">
           <option value="">Select an option</option>
           <option value="CUR_LOCATION">Current location</option>
@@ -88,7 +88,7 @@
           <option value="OPT_DEST">Optional Destionation</option>
         </select>
       </div>
-      <div class="col-md-2 col-sm-4 col-xs-12">
+      <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
         <input
           type="text"
           class="form-control"
@@ -96,9 +96,9 @@
           v-model="filterValue"
         />
       </div>
-      <div class="col-md-2 col-sm-4 col-xs-12">
+      <div class="menu col-lg-2 col-md-3 col-sm-12 col-xs-12">
         <button
-          class="btn btn-secondary"
+          class="btn btn-primary"
           type="button"
           v-on:click.prevent="refreshButton()"
         > <i class="fa fa-refresh"></i> Refresh
@@ -303,5 +303,14 @@ td {
   color: #0a53be;
   text-decoration: underline;
   cursor: pointer;
+}
+.menu {
+  text-align: left;
+}
+@media screen and (max-width: 767px) {
+  button {
+    margin-top: 10px;
+    float: left;
+  }
 }
 </style>

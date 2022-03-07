@@ -36,4 +36,9 @@ export default {
   height: 30px;
   border-radius: 50px;
 }
+.btn-danger {
+  border-color: #ebc815 !important;
+  background-color: #fce205 !important;
+  color: black !important;
+}
 </style>
