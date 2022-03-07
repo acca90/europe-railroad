@@ -101,7 +101,7 @@
           class="btn btn-secondary"
           type="button"
           v-on:click.prevent="refresh()"
-        > <i class="fa fa-refresh"></i>Refresh
+        > <i class="fa fa-refresh"></i> Refresh
         </button>
       </div>
     </div>
