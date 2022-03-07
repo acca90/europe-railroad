@@ -53,9 +53,9 @@
 
           <div class="row custom-margin">
             <div class="col-md-12">
-              <button class="btn btn-large btn-primary custom-margin" v-on:click="logOnFacebook">
-                <i class="fa fa-facebook"></i>
-                LOG IN WITH FACEBOOK
+              <button class="btn btn-large btn-dark custom-margin" v-on:click="logOnApple">
+                <i class="fa fa-apple"></i>
+                LOG IN WITH APPLE
               </button>
 
               <button class="btn btn-large btn-danger custom-margin" v-on:click="logOnGoogle">
@@ -63,9 +63,9 @@
                 LOG IN WITH GOOGLE
               </button>
 
-              <button class="btn btn-large btn-dark custom-margin" v-on:click="logOnApple">
-                <i class="fa fa-apple"></i>
-                LOG IN WITH APPLE
+              <button class="btn btn-large btn-primary custom-margin" v-on:click="logOnFacebook">
+                <i class="fa fa-facebook"></i>
+                LOG IN WITH FACEBOOK
               </button>
             </div>
           </div>
