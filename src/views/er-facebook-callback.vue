@@ -1,5 +1,6 @@
 <template>
 <div>
+  <span>Loading...</span>
 </div>
 </template>
 
@@ -12,6 +13,10 @@
       }
     },
     mounted() {
+      const self = this;
+      setTimeout(function () {
+        window.close()
+      },5000);
       this.callback = this.auth.getAuth0Facebook().popup.callback()
     }
   }
