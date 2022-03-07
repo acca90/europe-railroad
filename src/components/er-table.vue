@@ -100,7 +100,7 @@
         <button
           class="btn btn-secondary"
           type="button"
-          v-on:click.prevent="refresh()"
+          v-on:click.prevent="refreshButton()"
         > <i class="fa fa-refresh"></i> Refresh
         </button>
       </div>
@@ -217,7 +217,7 @@ export default {
       filterOption: "",
       filterValue: "",
       contact: {},
-      loading: false,
+      loading: true,
     };
   },
   computed: {
@@ -227,8 +227,6 @@ export default {
   },
   methods: {
     async refresh() {
-      this.loading = true;
-      this.tableDataRaw = [];
       const response = await this.$axios.get(
         "https://sc-ukraine.ndmglobal.com/api/execute/all-refugees"
       );
@@ -277,6 +275,11 @@ export default {
         !!row.community_center_phone_country_code ||
         !!row.community_center_phone_number
       );
+    },
+    refreshButton() {
+      this.loading = true;
+      this.tableDataRaw = [];
+      this.refresh()
     },
   },
   mounted() {
