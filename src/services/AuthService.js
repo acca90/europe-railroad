@@ -1,28 +1,28 @@
 import auth0 from 'auth0-js'
 
 export default class AuthService {
-  auth0facebook = new auth0.WebAuth({
+  auth0 = new auth0.WebAuth({
     domain: 'europe-railroad.eu.auth0.com',
     clientID: 'YpnJbZuMC3qw14WHASj5L0yvHBAX33wJ',
     audience: 'https://europe-railroad/',
     responseType: 'token id_token'
   });
 
-  getAuth0Facebook() {
-    return this.auth0facebook;
+  getAuth0() {
+    return this.auth0;
   };
 
-  facebook(callBack) {
-    this.auth0facebook.popup.authorize({
-      connection: 'facebook',
+  social(social, callBack) {
+    this.auth0.popup.authorize({
+      connection: social,
       audience: 'https://europe-railroad/',
-      redirectUri: window.location.origin + "/facebook/callback",
+      redirectUri: window.location.origin + "/social/callback",
     }, callBack);
   };
 
   handleAuthentication () {
     const parseHash = (resolve, reject) => {
-      this.auth0facebook.parseHash((err, authResult) => {
+      this.auth0.parseHash((err, authResult) => {
         if (authResult) {
           resolve(authResult);
         } else if (err) {

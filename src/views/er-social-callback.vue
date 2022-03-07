@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: "er-facebook-callback",
+    name: "er-social-callback",
     data() {
       return {
         callback: null
@@ -17,7 +17,7 @@
       setTimeout(function () {
         window.close()
       },5000);
-      this.callback = this.auth.getAuth0Facebook().popup.callback()
+      this.callback = this.auth.getAuth0().popup.callback()
     }
   }
 </script>

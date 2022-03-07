@@ -58,10 +58,10 @@
                 LOG IN WITH FACEBOOK
               </button>
 
-<!--              <button class="btn btn-large btn-danger custom-margin">-->
-<!--                <i class="fa fa-google"></i>-->
-<!--                LOG IN WITH GOOGLE-->
-<!--              </button>-->
+              <button class="btn btn-large btn-danger custom-margin" v-on:click="logOnGoogle">
+                <i class="fa fa-google"></i>
+                LOG IN WITH GOOGLE
+              </button>
 
 <!--              <button class="btn btn-large btn-dark custom-margin">-->
 <!--                <i class="fa fa-apple"></i>-->
@@ -107,9 +107,12 @@ export default {
   methods: {
     ...mapActions(["login", "logout"]),
     logOnFacebook() {
-      this.auth.facebook(this.facebookHandler);
+      this.auth.social('facebook', this.socialHandler);
     },
-    facebookHandler(errorResp, successResp) {
+    logOnGoogle() {
+      this.auth.social('google-oauth2', this.socialHandler);
+    },
+    socialHandler(errorResp, successResp) {
       if (errorResp) {
         this.errorHandler(errorResp);
       } else {
