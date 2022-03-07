@@ -96,6 +96,15 @@
           v-model="filterValue"
         />
       </div>
+      <div class="col-md-2 col-sm-4 col-xs-12">
+        <button
+          class="btn btn-secondary"
+          type="button"
+          v-on:click.prevent="refresh()"
+        > Refresh
+          <i class="fa fa-refresh"></i>
+        </button>
+      </div>
     </div>
     <div class="row mt-2">
       <div class="table-responsive">
@@ -113,6 +122,7 @@
               <th class="text-truncate" style="max-width: 150px">Car Seats</th>
               <th class="text-truncate" style="max-width: 150px">Kids</th>
               <th class="text-truncate" style="max-width: 150px">Pets</th>
+              <th class="text-truncate" style="max-width: 150px">Total Passengers</th>
               <th class="text-truncate" style="max-width: 150px">Requested</th>
             </tr>
           </thead>
@@ -180,10 +190,16 @@
                 {{ row.how_many_pets || "-" }}
               </td>
               <td class="text-truncate" style="max-width: 150px">
+                {{ row.how_many_total_passengers || "-" }}
+              </td>
+              <td class="text-truncate" style="max-width: 150px">
                 {{ new Date(row.inserted).toISOString().split("T")[0] }}
               </td>
             </tr>
-            <tr v-if="!tableData.length">
+            <tr v-if="!tableData.length && this.loading">
+              <td colspan="14"><i class="fa fa-refresh fa-spin fa-2x fa-fw"></i>Loading...</td>
+            </tr>
+            <tr v-if="!tableData.length && !this.loading">
               <td colspan="14">No records found</td>
             </tr>
           </tbody>
@@ -199,28 +215,26 @@ export default {
   data() {
     return {
       tableDataRaw: [],
-      canRefresh: true,
       filterOption: "",
       filterValue: "",
       contact: {},
+      loading: false,
     };
   },
   computed: {
     tableData() {
       return this.filterTable(this.tableDataRaw);
     },
-    disableRefresh() {
-      return !this.canRefresh;
-    },
   },
   methods: {
     async refresh() {
+      this.loading = true;
+      this.tableDataRaw = [];
       const response = await this.$axios.get(
         "https://sc-ukraine.ndmglobal.com/api/execute/all-refugees"
       );
       this.tableDataRaw = response.results;
-      this.canRefresh = false;
-      setTimeout(() => (this.canRefresh = true), 60 * 1000 * 5);
+      this.loading = false;
     },
     filterTable(datatable) {
       return datatable.filter((row) => {
@@ -268,6 +282,7 @@ export default {
   },
   mounted() {
     this.refresh();
+    setInterval(() => this.refresh(), 60 * 1000);
   },
 };
 </script>
