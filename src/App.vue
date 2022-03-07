@@ -36,7 +36,7 @@ export default {
   height: 30px;
   border-radius: 50px;
 }
-.btn-danger {
+.btn-ukraine {
   border-color: #ebc815 !important;
   background-color: #fce205 !important;
   color: black !important;

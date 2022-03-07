@@ -34,7 +34,7 @@
         </li>
         <li class="nav-item">
           <button
-            class="btn btn-xs btn-danger"
+            class="btn btn-xs btn-ukraine"
             aria-current="page"
             v-on:click="iAmRefugee()"
           >
@@ -54,7 +54,7 @@
         </li>
       </ul>
       <form class="text-end">
-        <button class="btn btn-danger" v-on:click.prevent="logoutApp">
+        <button class="btn btn-ukraine" v-on:click.prevent="logoutApp">
           <i class="fa fa-sign-out"></i>
         </button>
       </form>
