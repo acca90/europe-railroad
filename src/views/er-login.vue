@@ -58,15 +58,24 @@
                 LOG IN WITH APPLE
               </button>
 
+              <button class="btn btn-large btn-primary custom-margin" v-on:click="logOnFacebook">
+                <i class="fa fa-facebook"></i>
+                LOG IN WITH FACEBOOK
+              </button>
+
               <button class="btn btn-large btn-danger custom-margin" v-on:click="logOnGoogle">
                 <i class="fa fa-google"></i>
                 LOG IN WITH GOOGLE
               </button>
 
-              <button class="btn btn-large btn-primary custom-margin" v-on:click="logOnFacebook">
-                <i class="fa fa-facebook"></i>
-                LOG IN WITH FACEBOOK
+              <button
+                  data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop"
+                  class="btn btn-large btn-success custom-margin" >
+                <i class="fa fa-envelope"></i>
+                LOG IN WITH EMAIL
               </button>
+
             </div>
           </div>
 
@@ -89,6 +98,73 @@
         <small>
           Peace. {{ new Date().getFullYear() }}
         </small>
+      </div>
+    </div>
+
+    <div class="modal static fade"
+         id="staticBackdrop"
+         tabindex="-1"
+         data-bs-backdrop="static"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Login with email
+            </h5>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+
+            <div class="container">
+
+              <form class="text-left">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Email address</label>
+                  <input type="email"
+                         class="form-control"
+                         id="exampleInputEmail1"
+                         placeholder="your@email.com"
+                         aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1">
+                </div>
+                <a href="">Forgot your password?</a>
+              </form>
+
+            </div>
+
+          </div>
+          <div class="modal-footer">
+
+            <button type="submit" class="btn btn-primary">
+              <i class="fa fa-sign-in"></i>
+              Sign In
+            </button>
+
+            <button type="submit" class="btn btn-secondary">
+              <i class="fa fa-user-plus"></i>
+              Sign Up
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal">
+              <i class="fa fa-remove"></i>
+              Close
+            </button>
+
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -162,5 +238,11 @@ p {
 }
 small {
   font-size: 10px;
+}
+.text-left {
+  text-align: left;
+}
+a {
+  text-decoration: none;
 }
 </style>
