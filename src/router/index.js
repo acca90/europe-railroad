@@ -3,7 +3,7 @@ import Home from "../views/er-home.vue";
 import Login from "../views/er-login.vue";
 import erFacebookCallback from "../views/er-social-callback.vue";
 import erSupport from "../views/er-support.vue";
-
+import erProfile from "../views/er-profile.vue";
 import store from "../store";
 
 const router = createRouter({
@@ -23,6 +23,14 @@ const router = createRouter({
       path: "/support",
       name: "Support",
       component: erSupport,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: "/profile",
+      name: "Profile",
+      component: erProfile,
       meta: {
         requiresAuth: true,
       },
