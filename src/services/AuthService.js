@@ -38,4 +38,17 @@ export default class AuthService {
       redirectUri: window.location.origin + "/callback",
     }, errorLoginHandler);
   };
+
+  signUp(form, errorHandler) {
+    this.auth0.signup({
+        connection: 'Username-Password-Authentication',
+        email: form.email,
+        password: form.password,
+        user_metadata: {
+          firstName: form.firstName,
+          lastName: form.lastName,
+          name: form.firstName + " " + form.lastName
+        }
+    },errorHandler )
+  };
 }

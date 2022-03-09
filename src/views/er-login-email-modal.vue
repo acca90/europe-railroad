@@ -1,160 +1,212 @@
 <template>
-    <div class="modal static fade"
-         id="staticBackdrop"
-         tabindex="-1"
-         data-bs-backdrop="static"
-         aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">{{ txt.headerText }}</h5>
-            <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                v-on:click="resetModal"
-            ></button>
+  <div
+    class="modal static fade"
+    id="staticBackdrop"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            {{ txt.headerText }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            v-on:click="resetModal"
+          ></button>
+        </div>
+
+        <!--   Body & footer for SignIn        -->
+        <div class="modal-body" v-if="!signUp">
+          <div class="container">
+            <form class="text-left">
+              <div class="mb-3" v-if="!loading">
+                <label for="exampleInputEmail1" class="form-label">{{
+                  txt.email
+                }}</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="exampleInputEmail1"
+                  placeholder="your@email.com"
+                  aria-describedby="emailHelp"
+                  v-model="formSignIn.email"
+                />
+              </div>
+              <div class="mb-3" v-if="forgotpass && !loading">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  v-on:click.prevent="sendForgotPasswordEmail"
+                >
+                  <i class="fa fa-sign-in"></i>
+                  {{ txt.sendMail }}
+                </button>
+              </div>
+              <div class="mb-3" v-if="!forgotpass && !loading">
+                <label for="exampleInputPassword1" class="form-label">{{
+                  txt.password
+                }}</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="exampleInputPassword1"
+                  v-model="formSignIn.password"
+                />
+                <a href="" v-on:click.prevent="forgotpass = true">{{
+                  txt.forgotPass
+                }}</a>
+              </div>
+              <div class="mb-3">
+                <div
+                  v-if="error"
+                  class="alert"
+                  :class="alert_class"
+                  role="alert"
+                >
+                  <i class="fa fa-warning"></i>
+                  {{ error }}
+                </div>
+              </div>
+              <div v-if="loading" style="text-align: center">
+                <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+              </div>
+            </form>
           </div>
+        </div>
+        <div class="modal-footer" v-if="!signUp">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            v-on:click="validateSighIn"
+          >
+            <i class="fa fa-sign-in"></i>
+            {{ txt.signIn }}
+          </button>
 
-          <!--   Body & footer for SignIn        -->
-          <div class="modal-body" v-if="!signUp">
-            <div class="container">
-              <form class="text-left">
-                <div class="mb-3" v-if="!loading">
-                  <label for="exampleInputEmail1" class="form-label"
-                  >{{ txt.email }}</label
-                  >
-                  <input
-                      type="email"
-                      class="form-control"
-                      id="exampleInputEmail1"
-                      placeholder="your@email.com"
-                      aria-describedby="emailHelp"
-                      v-model="formSignIn.email"
-                  />
+          <button
+            type="submit"
+            class="btn btn-secondary"
+            v-on:click="signUpForm"
+          >
+            <i class="fa fa-user-plus"></i>
+            {{ txt.signUp }}
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-danger"
+            data-bs-dismiss="modal"
+            v-on:click="resetModal"
+          >
+            <i class="fa fa-remove"></i>
+            {{ txt.close }}
+          </button>
+        </div>
+
+        <!--  Body & footer for SignUp        -->
+        <div class="modal-body" v-if="signUp">
+          <div class="container">
+            <form class="text-left">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">{{
+                  txt.email
+                }}</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="exampleInputEmail1"
+                  placeholder="your@email.com"
+                  aria-describedby="emailHelp"
+                  v-model="formSignUp.email"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">{{
+                  txt.password
+                }}</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="inputPassword"
+                  v-model="formSignUp.password"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="firstName" class="form-label">{{
+                  txt.firstName
+                }}</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputFirstName"
+                  v-model="formSignUp.firstName"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="lastName" class="form-label">{{
+                  txt.lastName
+                }}</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputLastName"
+                  v-model="formSignUp.lastName"
+                />
+              </div>
+
+              <div class="mb-3 form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="checkbox"
+                />
+                <label class="form-check-label" for="flexCheckChecked">
+                  {{ txt.checkbox }}
+                </label>
+              </div>
+
+              <div class="mb-3">
+                <div
+                  v-if="error"
+                  class="alert"
+                  :class="alert_class"
+                  role="alert"
+                >
+                  <i class="fa fa-warning"></i>
+                  {{ error }}
                 </div>
-                <div class="mb-3" v-if="forgotpass && !loading">
-                  <button type="submit" class="btn btn-primary" v-on:click.prevent="sendForgotPasswordEmail">
-                    <i class="fa fa-sign-in"></i>
-                    {{ txt.sendMail }}
-                  </button>
-                </div>
-                <div class="mb-3" v-if="!forgotpass && !loading">
-                  <label for="exampleInputPassword1" class="form-label"
-                  >{{ txt.password }}</label
-                  >
-                  <input
-                      type="password"
-                      class="form-control"
-                      id="exampleInputPassword1"
-                      v-model="formSignIn.password"
-                  />
-                  <a href="" v-on:click.prevent="forgotpass = true"
-                  >{{ txt.forgotPass }}</a
-                  >
-                </div>
-                <div class="mb-3">
-                  <div v-if="error" class="alert" :class="alert_class" role="alert">
-                    <i class="fa fa-warning"></i>
-                    {{ error }}
-                  </div>
-                </div>
-                <div v-if="loading" style="text-align: center;">
-                  <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-                </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
-          <div class="modal-footer" v-if="!signUp">
-            <button type="submit" class="btn btn-primary" v-on:click="validateSighIn">
-              <i class="fa fa-sign-in"></i>
-              {{ txt.signIn }}
-            </button>
-
-            <button type="submit" class="btn btn-secondary" v-on:click="signUpForm" >
-              <i class="fa fa-user-plus"></i>
-              {{ txt.signUp }}
-            </button>
-
-            <button
-                type="button"
-                class="btn btn-danger"
-                data-bs-dismiss="modal"
-                v-on:click="resetModal"
-            >
-              <i class="fa fa-remove"></i>
-              {{ txt.close }}
-            </button>
-          </div>
-
-          <!--  Body & footer for SignUp        -->
-          <div class="modal-body" v-if="signUp">
-            <div class="container">
-              <form class="text-left">
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label"
-                  >{{ txt.email }}</label
-                  >
-                  <input
-                      type="email"
-                      class="form-control"
-                      id="exampleInputEmail1"
-                      placeholder="your@email.com"
-                      aria-describedby="emailHelp"
-                      v-model="formSignUp.email"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="password" class="form-label">{{ txt.password }}</label>
-                  <input type="password" class="form-control" id="inputPassword" v-model="formSignUp.password">
-                </div>
-                <div class="mb-3">
-                  <label for="firstName" class="form-label">{{ txt.firstName }}</label>
-                  <input type="text" class="form-control" id="inputFirstName" v-model="formSignUp.firstName">
-                </div>
-                <div class="mb-3">
-                  <label for="lastName" class="form-label">{{ txt.lastName }}</label>
-                  <input type="text" class="form-control" id="inputLastName" v-model="formSignUp.lastName">
-                </div>
-
-                <div class="mb-3 form-check">
-                  <input class="form-check-input" type="checkbox" v-model="checkbox">
-                  <label class="form-check-label" for="flexCheckChecked">
-                    {{ txt.checkbox }}
-                  </label>
-                </div>
-
-                <div class="mb-3">
-                  <div v-if="error" class="alert" :class="alert_class" role="alert">
-                    <i class="fa fa-warning"></i>
-                    {{ error }}
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-          <div class="modal-footer" v-if="signUp">
-            <button type="submit" class="btn btn-secondary" v-on:click="cleanSignUpForm">
-              <i class="fa fa-sign-in"></i>
-              {{ txt.back }}
-            </button>
-             <button type="submit" class="btn btn-primary" v-on:click="submitForm">
-              <i class="fa fa-sign-in"></i>
-              {{ txt.submit }}
-            </button>
-          </div>
-
-
+        </div>
+        <div class="modal-footer" v-if="signUp">
+          <button
+            type="submit"
+            class="btn btn-secondary"
+            v-on:click="cleanSignUpForm"
+          >
+            <i class="fa fa-sign-in"></i>
+            {{ txt.back }}
+          </button>
+          <button type="submit" class="btn btn-primary" v-on:click="submitForm">
+            <i class="fa fa-sign-in"></i>
+            {{ txt.submit }}
+          </button>
         </div>
       </div>
-
     </div>
+  </div>
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex';
+import { mapActions, mapState } from "vuex";
 export default {
   name: "er-login-email",
   data() {
@@ -206,8 +258,8 @@ export default {
       setTimeout(() => {
         this.loading = false;
 
-        this.resetModal()
-      }, 2.0*1000);
+        this.resetModal();
+      }, 2.0 * 1000);
     },
     resetModal() {
       this.isLogged = false;
@@ -215,17 +267,25 @@ export default {
       this.cleanSignUpForm();
     },
     submitForm() {
-       if (
+      if (
         this.formSignUp.firstName &&
         this.formSignUp.lastName &&
         this.formSignUp.email &&
         this.formSignUp.password &&
         this.checkbox
       ) {
-        alert("submitted")
+        this.auth.signUp(this.formSignUp, this.signUpHandler);
       } else {
         this.alert(this.txt.formAlert, "alert-warning");
       }
+    },
+    signUpHandler(resp) {
+      console.log(resp);
+      // if (resp.statusCode == 200) {
+      //   this.alert(resp.description, "alert-success");
+      // } else {
+      //   this.alert(resp.description, "alert-warning");
+      // }
     },
     alert(message, type) {
       this.alert_class = type;
@@ -243,7 +303,7 @@ export default {
         lastName: "",
         email: "",
         password: "",
-      }
+      };
       this.signUp = false;
       this.checkbox = false;
       this.error = "";
@@ -254,11 +314,8 @@ export default {
     },
     validateSighIn() {
       this.loading = true;
-      if(
-        this.formSignIn.email &&
-        this.formSignIn.password
-      ) {
-        this.auth0SighIn()
+      if (this.formSignIn.email && this.formSignIn.password) {
+        this.auth0SighIn();
       } else {
         this.loading = false;
         this.alert(this.txt.formAlert, "alert-warning");
@@ -266,18 +323,13 @@ export default {
     },
     auth0SighIn() {
       this.loading = true;
-      //password: "Bolaazul!grandona123"
-      let form = {
-        email: "joao@hokocloud.com",
-        password: "Bolaazul!grandona123"
-      }
-      this.auth.login(form, this.errorHandler)
+      this.auth.login(this.formSignIn, this.errorHandler);
     },
     errorHandler(error) {
       this.loading = false;
       this.alert(error.error_description, "alert-warning");
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
