@@ -13,11 +13,21 @@ export default class AuthService {
   };
 
   social(social, callBack) {
-    this.auth0.popup.authorize({
-      connection: social,
-      audience: 'https://europe-railroad/',
-      redirectUri: window.location.origin + "/social/callback",
-    }, callBack);
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+      this.auth0.authorize({
+        connection: social,
+        audience: 'https://europe-railroad/',
+        redirectUri: window.location.origin + "/social/callback",
+        responseType: 'token id_token',
+      });
+    } else {
+      console.log('This is a IOS device');
+      this.auth0.popup.authorize({
+        connection: social,
+        audience: 'https://europe-railroad/',
+        redirectUri: window.location.origin + "/social/callback",
+      }, callBack);
+    }
   };
 
   login(form, errorLoginHandler) {
@@ -28,20 +38,4 @@ export default class AuthService {
       redirectUri: "http://localhost:8080/social/callback",
     }, errorLoginHandler);
   };
-
-  handleAuthentication () {
-    const parseHash = (resolve, reject) => {
-      this.auth0.parseHash((err, authResult) => {
-        if (authResult) {
-          resolve(authResult);
-        } else if (err) {
-          reject(err);
-        }
-      })
-    };
-
-    return new Promise(function(resolve, reject) {
-      parseHash(resolve, reject);
-    });
-  }
 }

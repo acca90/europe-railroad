@@ -27,7 +27,7 @@ const store = createStore({
       state.isAuthenticated = value;
     },
     setAccessToken(state, value) {
-      document.cookie = `accessToken=${value};`;
+      document.cookie = `accessToken=${value};path=/`;
       if (!value) {
         const now = new Date();
         now.setMonth(now.getMonth() - 1);

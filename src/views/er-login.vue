@@ -135,7 +135,6 @@ export default {
       }
     },
     errorHandler(resp) {
-      console.error(resp);
       this.logout().then(() => this.$router.push("/login"));
     },
     successHandler(resp) {
