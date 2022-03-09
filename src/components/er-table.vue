@@ -137,9 +137,7 @@
                 </a>
               </td>
               <td class="text-truncate" style="max-width: 300px">
-                {{ row.current_address }},
-                {{ row.location_city }}
-                ({{ row.location_country }})
+                {{ renderLocation(row) }}
               </td>
               <td class="text-truncate" style="max-width: 300px">
                 <div v-if="!!row.community_center_address">
@@ -151,14 +149,10 @@
                     v-on:mouseover="setContact(row)"
                   >
                     <i class="fa fa-phone"></i>
-                    {{ row.community_center_address }},
-                    {{ row.community_center_city }}
-                    ({{ row.community_center_country }})
+                    {{ renderCenter(row) }}
                   </a>
                   <span v-else>
-                    {{ row.community_center_address }},
-                    {{ row.community_center_city }}
-                    ({{ row.community_center_country }})
+                    {{ renderCenter(row) }}
                   </span>
                 </div>
                 <span v-else> - </span>
@@ -268,6 +262,34 @@ export default {
     },
     setContact(row) {
       this.contact = row;
+    },
+    renderLocation(row) {
+      let val = [];
+
+      if (row.current_address)
+        val.push(row.current_address);
+
+      if (row.location_city)
+        val.push(row.location_city);
+
+      if (row.location_country)
+        val.push('(' + row.location_country + ')');
+
+      return val.join(', ')
+    },
+    renderCenter(row) {
+      let val = [];
+
+      if (row.community_center_address)
+        val.push(row.community_center_address);
+
+      if (row.community_center_city)
+        val.push(row.community_center_city);
+
+      if (row.community_center_country)
+        val.push('(' + row.community_center_country + ')');
+
+      return val.join(', ')
     },
     isContactAvailable(row) {
       return (
