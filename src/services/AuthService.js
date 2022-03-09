@@ -20,6 +20,15 @@ export default class AuthService {
     }, callBack);
   };
 
+  login(form, errorLoginHandler) {
+    this.auth0.login({
+      realm: 'Username-Password-Authentication',
+      email: form.email,
+      password: form.password,
+      redirectUri: "http://localhost:8080/social/callback",
+    }, errorLoginHandler);
+  };
+
   handleAuthentication () {
     const parseHash = (resolve, reject) => {
       this.auth0.parseHash((err, authResult) => {

@@ -18,11 +18,11 @@
             ></button>
           </div>
 
-          <!--   Body & footer for SignUp        -->
+          <!--   Body & footer for SignIn        -->
           <div class="modal-body" v-if="!signUp">
             <div class="container">
               <form class="text-left">
-                <div class="mb-3">
+                <div class="mb-3" v-if="!loading">
                   <label for="exampleInputEmail1" class="form-label"
                   >{{ txt.email }}</label
                   >
@@ -32,6 +32,7 @@
                       id="exampleInputEmail1"
                       placeholder="your@email.com"
                       aria-describedby="emailHelp"
+                      v-model="formSignIn.email"
                   />
                 </div>
                 <div class="mb-3" v-if="forgotpass && !loading">
@@ -48,10 +49,17 @@
                       type="password"
                       class="form-control"
                       id="exampleInputPassword1"
+                      v-model="formSignIn.password"
                   />
                   <a href="" v-on:click.prevent="forgotpass = true"
                   >{{ txt.forgotPass }}</a
                   >
+                </div>
+                <div class="mb-3">
+                  <div v-if="error" class="alert" :class="alert_class" role="alert">
+                    <i class="fa fa-warning"></i>
+                    {{ error }}
+                  </div>
                 </div>
                 <div v-if="loading" style="text-align: center;">
                   <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -60,7 +68,7 @@
             </div>
           </div>
           <div class="modal-footer" v-if="!signUp">
-            <button type="submit" class="btn btn-primary" >
+            <button type="submit" class="btn btn-primary" v-on:click="validateSighIn">
               <i class="fa fa-sign-in"></i>
               {{ txt.signIn }}
             </button>
@@ -127,7 +135,6 @@
               </form>
             </div>
           </div>
-
           <div class="modal-footer" v-if="signUp">
             <button type="submit" class="btn btn-secondary" v-on:click="cleanSignUpForm">
               <i class="fa fa-sign-in"></i>
@@ -180,12 +187,18 @@ export default {
         email: "",
         password: "",
       },
+      formSignIn: {
+        email: "",
+        password: "",
+      },
+      signInLoading: false,
       checkbox: false,
       error: "",
     };
   },
   methods: {
     forgotPass() {
+      this.cleanSignUpForm();
       this.forgotpass = !this.forgotpass;
     },
     sendForgotPasswordEmail() {
@@ -219,6 +232,7 @@ export default {
       this.error = message;
     },
     signUpForm() {
+      this.cleanSignUpForm();
       this.signUp = true;
       this.txt.headerText = "Sign up Form";
     },
@@ -233,7 +247,36 @@ export default {
       this.signUp = false;
       this.checkbox = false;
       this.error = "";
+      this.formSignIn = {
+        email: "",
+        password: "",
+      };
     },
+    validateSighIn() {
+      this.loading = true;
+      if(
+        this.formSignIn.email &&
+        this.formSignIn.password
+      ) {
+        this.auth0SighIn()
+      } else {
+        this.loading = false;
+        this.alert(this.txt.formAlert, "alert-warning");
+      }
+    },
+    auth0SighIn() {
+      this.loading = true;
+      //password: "Bolaazul!grandona123"
+      let form = {
+        email: "joao@hokocloud.com",
+        password: "Bolaazul!grandona123"
+      }
+      this.auth.login(form, this.errorHandler)
+    },
+    errorHandler(error) {
+      this.loading = false;
+      this.alert(error.error_description, "alert-warning");
+    }
   }
 };
 </script>
