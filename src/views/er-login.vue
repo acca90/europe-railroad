@@ -138,6 +138,8 @@ export default {
       this.logout().then(() => this.$router.push("/login"));
     },
     successHandler(resp) {
+      console.log(JSON.stringify(resp));
+      document.cookie = `pack=${btoa(resp)}`;
       document.cookie = `givenName=${resp.idTokenPayload.name};`;
       document.cookie = `picture=${btoa(resp.idTokenPayload.picture)};`;
       this.login(resp.accessToken).then(() => this.$router.push("/"));

@@ -1,20 +1,31 @@
 <template>
-  <div class="col-12">
-    <div class="header">
-      <h2>{{ txt.header }}</h2>
-    </div>
-    <div class="row form">
-      <div class="col-md-3"></div>
-      <div class="col-md-6">
-        <div>
-          <img :src="user.picture" class="rounded-circle"/>
-          <div class="card-body">
-            <h4 class="card-title">{{ user.name }}</h4>
-          </div>
-        </div>
+  <div class="container">
+
+    <div class="card mt-4 col-md-4 offset-md-4">
+      <div class="card-header">
+        <img :src="user.picture" class="rounded-circle"/>
+        <h2>
+          {{ user.name }}
+        </h2>
       </div>
-      <div class="col-md-3"></div>
+      <div class="card-body">
+        <h5>{{ txt.linkit }}</h5>
+
+        <button type="button" class="btn btn-dark">
+          <i class="fa fa-apple"></i>
+        </button>
+
+        <button type="button" class="btn btn-danger">
+          <i class="fa fa-google"></i>
+        </button>
+
+        <button type="button" class="btn btn-primary">
+          <i class="fa fa-facebook"></i>
+        </button>
+
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -26,6 +37,7 @@ export default {
     return {
       txt: {
         header: "Profile",
+        linkit: "Link your social networks",
       },
       user: {
         name: "",
@@ -54,7 +66,19 @@ export default {
 </script>
 
 <style scoped>
-.header {
-  padding-top: 2rem;
+img {
+  height: 100px;
+}
+
+.card img {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.card .card-body {
+  background: white;
+}
+button {
+  margin: 5px;
+  width: 50px;
 }
 </style>
