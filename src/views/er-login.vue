@@ -100,81 +100,17 @@
         </small>
       </div>
     </div>
-
-    <div class="modal static fade"
-         id="staticBackdrop"
-         tabindex="-1"
-         data-bs-backdrop="static"
-         aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              Login with email
-            </h5>
-            <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-
-            <div class="container">
-
-              <form class="text-left">
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Email address</label>
-                  <input type="email"
-                         class="form-control"
-                         id="exampleInputEmail1"
-                         placeholder="your@email.com"
-                         aria-describedby="emailHelp">
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">Password</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1">
-                </div>
-                <a href="">Forgot your password?</a>
-              </form>
-
-            </div>
-
-          </div>
-          <div class="modal-footer">
-
-            <button type="submit" class="btn btn-primary">
-              <i class="fa fa-sign-in"></i>
-              Sign In
-            </button>
-
-            <button type="submit" class="btn btn-secondary">
-              <i class="fa fa-user-plus"></i>
-              Sign Up
-            </button>
-
-            <button
-                type="button"
-                class="btn btn-danger"
-                data-bs-dismiss="modal">
-              <i class="fa fa-remove"></i>
-              Close
-            </button>
-
-          </div>
-        </div>
-      </div>
-    </div>
+    <er-login-email></er-login-email>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import ErLoginEmail from "./er-login-email-modal.vue";
 
 export default {
   name: "er-login",
+  components: {ErLoginEmail},
   data() {
     return {
       isLogged: false,
