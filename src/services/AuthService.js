@@ -35,7 +35,7 @@ export default class AuthService {
       realm: 'Username-Password-Authentication',
       email: form.email,
       password: form.password,
-      redirectUri: "http://localhost:8080/social/callback",
+      redirectUri: window.location.origin + "/callback",
     }, errorLoginHandler);
   };
 }
