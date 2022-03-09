@@ -91,6 +91,7 @@
       <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
         <input
           type="text"
+          placeholder="Search..."
           class="form-control"
           :disabled="!filterOption"
           v-model="filterValue"
