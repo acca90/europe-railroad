@@ -86,14 +86,6 @@
             <div class="container">
               <form class="text-left">
                 <div class="mb-3">
-                  <label for="firstName" class="form-label">{{ txt.firstName }}</label>
-                  <input type="text" class="form-control" id="inputFirstName" v-model="formSignUp.firstName">
-                </div>
-                <div class="mb-3">
-                  <label for="lastName" class="form-label">{{ txt.lastName }}</label>
-                  <input type="text" class="form-control" id="inputLastName" v-model="formSignUp.lastName">
-                </div>
-                <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"
                   >{{ txt.email }}</label
                   >
@@ -110,6 +102,14 @@
                   <label for="password" class="form-label">{{ txt.password }}</label>
                   <input type="password" class="form-control" id="inputPassword" v-model="formSignUp.password">
                 </div>
+                <div class="mb-3">
+                  <label for="firstName" class="form-label">{{ txt.firstName }}</label>
+                  <input type="text" class="form-control" id="inputFirstName" v-model="formSignUp.firstName">
+                </div>
+                <div class="mb-3">
+                  <label for="lastName" class="form-label">{{ txt.lastName }}</label>
+                  <input type="text" class="form-control" id="inputLastName" v-model="formSignUp.lastName">
+                </div>
 
                 <div class="mb-3 form-check">
                   <input class="form-check-input" type="checkbox" v-model="checkbox">
@@ -117,12 +117,19 @@
                     {{ txt.checkbox }}
                   </label>
                 </div>
+
+                <div class="mb-3">
+                  <div v-if="error" class="alert" :class="alert_class" role="alert">
+                    <i class="fa fa-warning"></i>
+                    {{ error }}
+                  </div>
+                </div>
               </form>
             </div>
           </div>
 
           <div class="modal-footer" v-if="signUp">
-            <button type="submit" class="btn btn-secondary" v-on:click="cleanSubmitForm">
+            <button type="submit" class="btn btn-secondary" v-on:click="cleanSignUpForm">
               <i class="fa fa-sign-in"></i>
               {{ txt.back }}
             </button>
@@ -165,14 +172,16 @@ export default {
         checkbox: "I'm over 18 years old.",
         back: "Back",
         submit: "Submit",
+        formAlert: "You must fill in all the fields",
       },
       formSignUp: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
       },
       checkbox: false,
+      error: "",
     };
   },
   methods: {
@@ -190,25 +199,40 @@ export default {
     resetModal() {
       this.isLogged = false;
       this.forgotpass = false;
-      this.cleanSubmitForm();
+      this.cleanSignUpForm();
     },
     submitForm() {
-      alert("validate form")
-      this.cleanSubmitForm();
+       if (
+        this.formSignUp.firstName &&
+        this.formSignUp.lastName &&
+        this.formSignUp.email &&
+        this.formSignUp.password &&
+        this.checkbox
+      ) {
+        alert("submitted")
+      } else {
+        this.alert(this.txt.formAlert, "alert-warning");
+      }
+    },
+    alert(message, type) {
+      this.alert_class = type;
+      this.error = message;
     },
     signUpForm() {
       this.signUp = true;
       this.txt.headerText = "Sign up Form";
     },
-    cleanSubmitForm() {
+    cleanSignUpForm() {
       this.txt.headerText = "Login with email";
       this.formSignUp = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
       }
       this.signUp = false;
+      this.checkbox = false;
+      this.error = "";
     },
   }
 };
