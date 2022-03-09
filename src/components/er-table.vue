@@ -213,6 +213,7 @@ export default {
       filterValue: "",
       contact: {},
       loading: true,
+      refreshListener: null,
     };
   },
   computed: {
@@ -307,8 +308,11 @@ export default {
   },
   mounted() {
     this.refresh();
-    setInterval(() => this.refresh(), 60 * 1000);
+    this.refreshListener = setInterval(() => this.refresh(), 60 * 1000);
   },
+  beforeUnmount() {
+    clearInterval(this.refreshListener)
+  }
 };
 </script>
 

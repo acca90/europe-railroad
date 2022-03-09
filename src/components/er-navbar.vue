@@ -33,6 +33,17 @@
           </RouterLink>
         </li>
         <li class="nav-item">
+          <RouterLink
+            to="/profile"
+            class="nav-link"
+            aria-current="page"
+            href="#"
+          >
+            <i class="fa fa-user"></i>
+            Profile
+          </RouterLink>
+        </li>
+        <li class="nav-item">
           <button
             class="btn btn-xs btn-ukraine"
             aria-current="page"
