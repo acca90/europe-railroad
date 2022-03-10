@@ -2,7 +2,7 @@
   <div class="col-12">
     <er-table-contact-details :currentContact="contact" />
     <div class="row mt-2">
-      <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12" >
+      <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
         <select class="form-select form-select mb-3" v-model="filterOption">
           <option value="">Select an option</option>
           <option value="CUR_LOCATION">Current location</option>
@@ -19,17 +19,15 @@
           v-model="filterValue"
         />
       </div>
-      <div class="menu col-lg-2 col-md-3 col-sm-12 col-xs-12">
+      <div class="text-left col-lg-8 col-md-6 col-sm-12 col-xs-12">
         <button
           class="btn btn-primary"
           type="button"
           v-on:click.prevent="refreshButton()"
-        > 
+        >
           <i class="fa fa-refresh"></i> Refresh
         </button>
-      </div>
-      <div class="col-md-2 col-sm-4 col-xs-12">
-        <div class="dropdown">
+        <div class="dropdown pull-right">
           <button
             class="btn btn-secondary dropdown-toggle"
             type="button"
@@ -42,7 +40,8 @@
           <ul class="dropdown-menu" aria-labelledby="toggleColumns">
             <li
               v-for="column in columns"
-              :class="column.fixed ? 'disabled' : ''"
+              :title="column.title"
+              :class="`text-truncate ${column.fixed ? 'disabled' : ''}`"
               :key="column.field"
               @click.stop.prevent="toggleColumnVisibility(column)"
             >
@@ -325,7 +324,8 @@ export default {
               if (a[this.sort.field] < b[this.sort.field]) return 1;
             }
           });
-      this.totalPages = Math.ceil(filteredSortedData.length / this.perPage) || 1;
+      this.totalPages =
+        Math.ceil(filteredSortedData.length / this.perPage) || 1;
       return this.currentPage === this.totalPages
         ? filteredSortedData.slice(
             this.currentPage <= 1
@@ -357,11 +357,6 @@ export default {
         this.currentPage === 1 ? this.currentPage : this.currentPage - 1;
     },
     navigateF() {
-      console.log(
-        this.currentPage === this.totalPages
-          ? this.currentPage
-          : this.currentPage + 1
-      );
       this.currentPage =
         this.currentPage === this.totalPages
           ? this.currentPage
@@ -483,7 +478,7 @@ export default {
     refreshButton() {
       this.loading = true;
       this.tableDataRaw = [];
-      this.refresh()
+      this.refresh();
     },
   },
   mounted() {
@@ -554,7 +549,17 @@ a.sort-by.desc:after {
 .page-link {
   cursor: pointer;
 }
+.dropdown {
+  min-width: 12rem;
+  max-width: 12rem;
+}
+.dropdown button {
+  width: 100%;
+}
 .dropdown-menu li {
+  font-size: small;
+  min-width: 12rem;
+  max-width: 12rem;
   padding: 0.5rem 1rem;
   border-bottom: 1px solid lightgray;
   cursor: pointer;
@@ -566,8 +571,11 @@ a.sort-by.desc:after {
 .dropdown-menu li input {
   margin-right: 1rem;
 }
-.menu {
+.text-left {
   text-align: left;
+}
+.text-right {
+  text-align: right;
 }
 @media screen and (max-width: 767px) {
   button {
