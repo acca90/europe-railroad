@@ -3,7 +3,7 @@
     <er-table-contact-details :currentContact="contact" />
     <div class="row mt-2">
       <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
-        <select class="form-select form-select mb-3" v-model="filterOption">
+        <select class="form-select form-select" v-model="filterOption">
           <option value="">Select an option</option>
           <option value="CUR_LOCATION">Current location</option>
           <option value="FIN_DEST">Final Destionation</option>
@@ -29,7 +29,7 @@
         </button>
         <div class="dropdown pull-right">
           <button
-            class="btn btn-secondary dropdown-toggle"
+            class="btn btn-primary dropdown-toggle"
             type="button"
             id="toggleColumns"
             data-bs-toggle="dropdown"
@@ -57,6 +57,23 @@
       </div>
     </div>
     <div class="row mt-2">
+      <nav aria-label="paginator">
+        <ul class="pagination justify-content-center mb-0">
+          <li class="page-item">
+            <a class="page-link " @click.prevent="navigateB">Previous</a>
+          </li>
+          <li class="page-item">
+            <span class="page-link"
+              >page {{ currentPage }} of {{ totalPages }}</span
+            >
+          </li>
+          <li class="page-item">
+            <a class="page-link " @click.prevent="navigateF">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="row mt-2">
       <div class="table-responsive fixTableHead" :style="tableHeight">
         <table class="table table-striped table-hover table-sm">
           <thead>
@@ -64,14 +81,14 @@
               <th
                 v-for="column in visibleColumns"
                 :key="column.title"
-                class="text-truncate"
-                style="max-width: 80px"
+                :class="`${column.sortable ? 'sortable' : ''}`"
+                :style="columnWidth(column.field)"
+                @click.stop.prevent="sortBy(column)"
               >
-                {{ column.title }}
+                <span class="text-truncate">{{ column.title }}</span>
                 <a
                   v-if="column.sortable"
                   :class="`sort-by ${sortableClass(column.field)}`"
-                  @click.prevent="sortBy(column.field)"
                 >
                 </a>
               </th>
@@ -82,7 +99,7 @@
               <td
                 v-if="isVisible('transpo_form_link')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('transpo_form_link')"
               >
                 <a
                   class="btn btn-xs btn-primary"
@@ -92,13 +109,17 @@
                   <i class="fa fa-cab"></i> Fill the form
                 </a>
               </td>
-              <td class="text-truncate" style="max-width: 300px">
+              <td 
+                v-if="isVisible('current_address')" 
+                class="text-truncate" 
+                :style="columnWidth('current_address')"
+              >
                 {{ renderLocation(row) }}
               </td>
               <td
                 v-if="isVisible('community_center_address')"
                 class="text-truncate"
-                style="max-width: 300px"
+                :style="columnWidth('community_center_address')"
               >
                 <div v-if="!!row.community_center_address">
                   <a
@@ -120,35 +141,35 @@
               <td
                 v-if="isVisible('original_city')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('original_city')"
               >
                 {{ row.original_city }}
               </td>
               <td
                 v-if="isVisible('preferable_final_location')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('preferable_final_location')"
               >
                 {{ row.preferable_final_location }}
               </td>
               <td
                 v-if="isVisible('optional_final_location')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('optional_final_location')"
               >
                 {{ row.optional_final_location }}
               </td>
               <td
                 v-if="isVisible('language')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('language')"
               >
                 {{ row.language }}
               </td>
               <td
                 v-if="isVisible('pay_transportation')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('pay_transportation')"
               >
                 <span v-if="row.pay_transportation">Yes</span>
                 <span v-else>No</span>
@@ -156,35 +177,35 @@
               <td
                 v-if="isVisible('how_many_cars_seats')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('how_many_cars_seats')"
               >
                 {{ row.how_many_cars_seats || "-" }}
               </td>
               <td
                 v-if="isVisible('how_many_kids')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('how_many_kids')"
               >
                 {{ row.how_many_kids || "-" }}
               </td>
               <td
                 v-if="isVisible('how_many_pets')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('how_many_pets')"
               >
                 {{ row.how_many_pets || "-" }}
               </td>
               <td
                 v-if="isVisible('how_many_total_passengers')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('how_many_total_passengers')"
               >
                 {{ row.how_many_total_passengers || "-" }}
               </td>
               <td
                 v-if="isVisible('inserted')"
                 class="text-truncate"
-                style="max-width: 150px"
+                :style="columnWidth('inserted')"
               >
                 {{ new Date(row.inserted).toISOString().split("T")[0] }}
               </td>
@@ -200,21 +221,6 @@
           </tbody>
         </table>
       </div>
-      <nav aria-label="paginator">
-        <ul class="pagination justify-content-center">
-          <li class="page-item">
-            <a class="page-link" @click.prevent="navigateB">Previous</a>
-          </li>
-          <li class="page-item">
-            <span class="page-link"
-              >page {{ currentPage }} of {{ totalPages }}</span
-            >
-          </li>
-          <li class="page-item">
-            <a class="page-link" @click.prevent="navigateF">Next</a>
-          </li>
-        </ul>
-      </nav>
     </div>
   </div>
 </template>
@@ -239,69 +245,82 @@ export default {
         {
           field: "transpo_form_link",
           title: "I can Help!",
+          width: "150px",
           visibility: true,
           fixed: true,
         },
         {
           field: "current_address",
           title: "Current Location",
+          width: "300px",
           visibility: true,
         },
         {
           field: "community_center_address",
           title: "Community Center",
+          width: "300px",
           visibility: true,
         },
         {
           field: "original_city",
           title: "Orig. City",
+          width: "150px",
           visibility: true,
           sortable: true,
         },
         {
           field: "preferable_final_location",
           title: "Final Destination",
+          width: "150px",
           visibility: true,
           sortable: true,
         },
         {
           field: "optional_final_location",
           title: "Optional Destination",
+          width: "150px",
           visibility: true,
         },
         {
           field: "language",
           title: "Language",
+          width: "150px",
           visibility: true,
         },
         {
           field: "pay_transportation",
           title: "Can pay for transport",
+          width: "150px",
           visibility: true,
         },
         {
           field: "how_many_cars_seats",
           title: "Car Seats",
+          width: "150px",
           visibility: true,
         },
         {
           field: "how_many_kids",
           title: "Kids",
+          width: "150px",
           visibility: true,
         },
         {
           field: "how_many_pets",
           title: "Pets",
+          width: "150px",
           visibility: true,
         },
         {
           field: "how_many_total_passengers",
           title: "Total Passengers",
+          width: "150px",
           visibility: true,
         },
         {
           field: "inserted",
           title: "Requested",
+          width: "150px",
           visibility: true,
         },
       ],
@@ -324,8 +343,7 @@ export default {
               if (a[this.sort.field] < b[this.sort.field]) return 1;
             }
           });
-      this.totalPages =
-        Math.ceil(filteredSortedData.length / this.perPage) || 1;
+      this.totalPages = Math.ceil(filteredSortedData.length / this.perPage) || 1;
       return this.currentPage === this.totalPages
         ? filteredSortedData.slice(
             this.currentPage <= 1
@@ -373,14 +391,20 @@ export default {
         return column;
       });
     },
+    columnWidth(field) {
+      return `max-width: ${this.columns.find((column) => column.field === field).width};`;
+    },
     isVisible(field) {
       return this.columns.find((column) => column.field === field).visibility;
     },
     sortableClass(field) {
       return this.sort.field === field ? this.sort.order : "none";
     },
-    sortBy(field) {
-      if (this.sort.field === field) {
+    sortBy(col) {
+      if (!col.sortable) {
+        return;
+      }
+      if (this.sort.field === col.field) {
         if (this.sort.order === "asc") {
           this.sort = {
             field: "",
@@ -388,13 +412,13 @@ export default {
           };
         } else {
           this.sort = {
-            field: field,
+            field: col.field,
             order: "asc",
           };
         }
       } else {
         this.sort = {
-          field: field,
+          field: col.field,
           order: "desc",
         };
       }
@@ -515,9 +539,16 @@ td {
 .table > :not(:first-child) {
   border-top: none;
 }
-th a.sort-by {
-  padding-right: 18px;
-  position: relative;
+th.sortable {
+  cursor: pointer;
+}
+th.sortable span {
+  float: left;
+  width: calc(100% - 1.5rem);
+}
+th:not(.sortable) span {
+  float: left;
+  width: 100%;
 }
 a.sort-by:before,
 a.sort-by:after {
@@ -525,8 +556,8 @@ a.sort-by:after {
   content: "";
   display: block;
   height: 0;
-  right: 5px;
-  top: 50%;
+  right: 0.5rem;
+  top: 48%;
   position: absolute;
   width: 0;
 }
@@ -564,6 +595,9 @@ a.sort-by.desc:after {
   border-bottom: 1px solid lightgray;
   cursor: pointer;
 }
+.dropdown-menu li input {
+  pointer-events: none;
+}
 .dropdown-menu li.disabled {
   color: lightgray;
   cursor: not-allowed;
@@ -576,6 +610,16 @@ a.sort-by.desc:after {
 }
 .text-right {
   text-align: right;
+}
+.page-link.blue {
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+.page-link.blue:hover {
+  color: #fff;
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
 }
 @media screen and (max-width: 767px) {
   button {
