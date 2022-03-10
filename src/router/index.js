@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/er-home.vue";
 import Login from "../views/er-login.vue";
-import erFacebookAuth from "../views/er-facebook-auth.vue";
-import erFacebookCallback from "../views/er-facebook-callback.vue";
+import erFacebookCallback from "../views/er-social-callback.vue";
 import erSupport from "../views/er-support.vue";
 
 import store from "../store";
@@ -16,12 +15,7 @@ const router = createRouter({
       component: Login,
     },
     {
-      path: "/facebook",
-      name: "Facebook Auth",
-      component: erFacebookAuth,
-    },
-    {
-      path: "/facebook/callback",
+      path: "/social/callback",
       name: "Facebook Auth",
       component: erFacebookCallback,
     },

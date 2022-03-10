@@ -53,20 +53,20 @@
 
           <div class="row custom-margin">
             <div class="col-md-12">
+              <button class="btn btn-large btn-dark custom-margin" v-on:click="logOnApple">
+                <i class="fa fa-apple"></i>
+                LOG IN WITH APPLE
+              </button>
+
+              <button class="btn btn-large btn-danger custom-margin" v-on:click="logOnGoogle">
+                <i class="fa fa-google"></i>
+                LOG IN WITH GOOGLE
+              </button>
+
               <button class="btn btn-large btn-primary custom-margin" v-on:click="logOnFacebook">
                 <i class="fa fa-facebook"></i>
                 LOG IN WITH FACEBOOK
               </button>
-
-<!--              <button class="btn btn-large btn-danger custom-margin">-->
-<!--                <i class="fa fa-google"></i>-->
-<!--                LOG IN WITH GOOGLE-->
-<!--              </button>-->
-
-<!--              <button class="btn btn-large btn-dark custom-margin">-->
-<!--                <i class="fa fa-apple"></i>-->
-<!--                LOG IN WITH APPLE-->
-<!--              </button>-->
             </div>
           </div>
 
@@ -107,9 +107,15 @@ export default {
   methods: {
     ...mapActions(["login", "logout"]),
     logOnFacebook() {
-      this.auth.facebook(this.facebookHandler);
+      this.auth.social('facebook', this.socialHandler);
     },
-    facebookHandler(errorResp, successResp) {
+    logOnGoogle() {
+      this.auth.social('google-oauth2', this.socialHandler);
+    },
+    logOnApple() {
+      this.auth.social('apple', this.socialHandler);
+    },
+    socialHandler(errorResp, successResp) {
       if (errorResp) {
         this.errorHandler(errorResp);
       } else {
@@ -117,7 +123,6 @@ export default {
       }
     },
     errorHandler(resp) {
-      console.error(resp);
       this.logout().then(() => this.$router.push("/login"));
     },
     successHandler(resp) {

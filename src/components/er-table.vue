@@ -2,7 +2,7 @@
   <div class="col-12">
     <er-table-contact-details :currentContact="contact" />
     <div class="row mt-2">
-      <div class="col-md-2 col-sm-4 col-xs-12">
+      <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12" >
         <select class="form-select form-select mb-3" v-model="filterOption">
           <option value="">Select an option</option>
           <option value="CUR_LOCATION">Current location</option>
@@ -10,20 +10,21 @@
           <option value="OPT_DEST">Optional Destionation</option>
         </select>
       </div>
-      <div class="col-md-2 col-sm-4 col-xs-12">
+      <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
         <input
           type="text"
+          placeholder="Search..."
           class="form-control"
           :disabled="!filterOption"
           v-model="filterValue"
         />
       </div>
-      <div class="col-md-2 col-sm-4 col-xs-12">
+      <div class="menu col-lg-2 col-md-3 col-sm-12 col-xs-12">
         <button
-          class="btn btn-secondary"
+          class="btn btn-primary"
           type="button"
-          v-on:click.prevent="refresh()"
-        >
+          v-on:click.prevent="refreshButton()"
+        > 
           <i class="fa fa-refresh"></i> Refresh
         </button>
       </div>
@@ -92,14 +93,8 @@
                   <i class="fa fa-cab"></i> Fill the form
                 </a>
               </td>
-              <td
-                v-if="isVisible('current_address')"
-                class="text-truncate"
-                style="max-width: 300px"
-              >
-                {{ row.current_address }},
-                {{ row.location_city }}
-                ({{ row.location_country }})
+              <td class="text-truncate" style="max-width: 300px">
+                {{ renderLocation(row) }}
               </td>
               <td
                 v-if="isVisible('community_center_address')"
@@ -115,14 +110,10 @@
                     v-on:mouseover="setContact(row)"
                   >
                     <i class="fa fa-phone"></i>
-                    {{ row.community_center_address }},
-                    {{ row.community_center_city }}
-                    ({{ row.community_center_country }})
+                    {{ renderCenter(row) }}
                   </a>
                   <span v-else>
-                    {{ row.community_center_address }},
-                    {{ row.community_center_city }}
-                    ({{ row.community_center_country }})
+                    {{ renderCenter(row) }}
                   </span>
                 </div>
                 <span v-else> - </span>
@@ -245,7 +236,6 @@ export default {
         order: "",
       },
       contact: {},
-      loading: false,
       columns: [
         {
           field: "transpo_form_link",
@@ -316,6 +306,7 @@ export default {
           visibility: true,
         },
       ],
+      loading: true,
     };
   },
   computed: {
@@ -355,8 +346,6 @@ export default {
   },
   methods: {
     async refresh() {
-      this.loading = true;
-      this.tableDataRaw = [];
       const response = await this.$axios.get(
         "https://sc-ukraine.ndmglobal.com/api/execute/all-refugees"
       );
@@ -451,12 +440,50 @@ export default {
     setContact(row) {
       this.contact = row;
     },
+    renderLocation(row) {
+      let val = [];
+
+      if (row.current_address) {
+        val.push(row.current_address);
+      }
+
+      if (row.location_city) {
+        val.push(row.location_city);
+      }
+
+      if (row.location_country) {
+        val.push("(" + row.location_country + ")");
+      }
+
+      return val.join(", ");
+    },
+    renderCenter(row) {
+      let val = [];
+
+      if (row.community_center_address) {
+        val.push(row.community_center_address);
+      }
+
+      if (row.community_center_city) {
+        val.push(row.community_center_city);
+      }
+
+      if (row.community_center_country)
+        val.push("(" + row.community_center_country + ")");
+
+      return val.join(", ");
+    },
     isContactAvailable(row) {
       return (
         !!row.community_center_email ||
         !!row.community_center_phone_country_code ||
         !!row.community_center_phone_number
       );
+    },
+    refreshButton() {
+      this.loading = true;
+      this.tableDataRaw = [];
+      this.refresh()
     },
   },
   mounted() {
@@ -538,5 +565,14 @@ a.sort-by.desc:after {
 }
 .dropdown-menu li input {
   margin-right: 1rem;
+}
+.menu {
+  text-align: left;
+}
+@media screen and (max-width: 767px) {
+  button {
+    margin-top: 10px;
+    float: left;
+  }
 }
 </style>
