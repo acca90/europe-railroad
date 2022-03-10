@@ -1,84 +1,6 @@
 <template>
   <div class="col-12">
-    <div
-      class="modal fade"
-      id="staticBackdrop"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              Community Center Contact Details
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <table class="table table-striped table-hover table-sm">
-              <thead>
-                <tr>
-                  <td style="width: 150px; text-align: left">Type</td>
-                  <td style="width: 150px; text-align: left">Conctact</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 150px; text-align: left">
-                    Community Center
-                  </td>
-                  <td style="width: 150px; text-align: left">
-                    {{ contact.community_center_name }}
-                  </td>
-                </tr>
-                <tr v-if="contact.community_center_contact_name">
-                  <td style="width: 150px; text-align: left">
-                    Person in Charge
-                  </td>
-                  <td style="width: 150px; text-align: left">
-                    {{ contact.community_center_contact_name }}
-                  </td>
-                </tr>
-                <tr
-                  v-if="
-                    contact.community_center_phone_country_code ||
-                    contact.community_center_phone_number
-                  "
-                >
-                  <td style="width: 150px; text-align: left">Phone</td>
-                  <td style="width: 150px; text-align: left">
-                    {{ contact.community_center_phone_country_code }}
-                    {{ contact.community_center_phone_number }}
-                  </td>
-                </tr>
-                <tr v-if="contact.community_center_email">
-                  <td style="width: 150px; text-align: left">Email</td>
-                  <td style="width: 150px; text-align: left">
-                    {{ contact.community_center_email }}
-                  </td>
-                </tr>
-                <tr></tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <er-table-contact-details :currentContact="contact" />
     <div class="row mt-2">
       <div class="col-md-2 col-sm-4 col-xs-12">
         <select class="form-select form-select mb-3" v-model="filterOption">
@@ -101,33 +23,67 @@
           class="btn btn-secondary"
           type="button"
           v-on:click.prevent="refresh()"
-        > <i class="fa fa-refresh"></i> Refresh
+        >
+          <i class="fa fa-refresh"></i> Refresh
         </button>
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-12">
+        <div class="dropdown">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="toggleColumns"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Toggle Columns
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="toggleColumns">
+            <li
+              v-for="column in columns"
+              :class="column.fixed ? 'disabled' : ''"
+              :key="column.field"
+              @click.stop.prevent="toggleColumnVisibility(column)"
+            >
+              <input
+                type="checkbox"
+                :checked="column.visibility"
+                :disabled="column.fixed"
+              />
+              {{ column.title }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="row mt-2">
-      <div class="table-responsive">
+      <div class="table-responsive fixTableHead" :style="tableHeight">
         <table class="table table-striped table-hover table-sm">
           <thead>
             <tr>
-              <th class="text-truncate" style="max-width: 80px">I can Help!</th>
-              <th class="text-truncate" style="max-width: 300px">Current Location</th>
-              <th class="text-truncate" style="max-width: 300px">Community Center</th>
-              <th class="text-truncate" style="max-width: 150px">Orig. City</th>
-              <th class="text-truncate" style="max-width: 150px">Final Destination</th>
-              <th class="text-truncate" style="max-width: 150px">Optional Destination</th>
-              <th class="text-truncate" style="max-width: 150px">Language</th>
-              <th class="text-truncate" style="max-width: 150px">Can pay for transport</th>
-              <th class="text-truncate" style="max-width: 150px">Car Seats</th>
-              <th class="text-truncate" style="max-width: 150px">Kids</th>
-              <th class="text-truncate" style="max-width: 150px">Pets</th>
-              <th class="text-truncate" style="max-width: 150px">Total Passengers</th>
-              <th class="text-truncate" style="max-width: 150px">Requested</th>
+              <th
+                v-for="column in visibleColumns"
+                :key="column.title"
+                class="text-truncate"
+                style="max-width: 80px"
+              >
+                {{ column.title }}
+                <a
+                  v-if="column.sortable"
+                  :class="`sort-by ${sortableClass(column.field)}`"
+                  @click.prevent="sortBy(column.field)"
+                >
+                </a>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="row in tableData" :key="row.id">
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('transpo_form_link')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 <a
                   class="btn btn-xs btn-primary"
                   :href="row.transpo_form_link"
@@ -136,12 +92,20 @@
                   <i class="fa fa-cab"></i> Fill the form
                 </a>
               </td>
-              <td class="text-truncate" style="max-width: 300px">
+              <td
+                v-if="isVisible('current_address')"
+                class="text-truncate"
+                style="max-width: 300px"
+              >
                 {{ row.current_address }},
                 {{ row.location_city }}
                 ({{ row.location_country }})
               </td>
-              <td class="text-truncate" style="max-width: 300px">
+              <td
+                v-if="isVisible('community_center_address')"
+                class="text-truncate"
+                style="max-width: 300px"
+              >
                 <div v-if="!!row.community_center_address">
                   <a
                     v-if="isContactAvailable(row)"
@@ -163,40 +127,82 @@
                 </div>
                 <span v-else> - </span>
               </td>
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('original_city')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 {{ row.original_city }}
               </td>
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('preferable_final_location')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 {{ row.preferable_final_location }}
               </td>
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('optional_final_location')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 {{ row.optional_final_location }}
               </td>
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('language')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 {{ row.language }}
               </td>
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('pay_transportation')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 <span v-if="row.pay_transportation">Yes</span>
                 <span v-else>No</span>
               </td>
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('how_many_cars_seats')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 {{ row.how_many_cars_seats || "-" }}
               </td>
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('how_many_kids')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 {{ row.how_many_kids || "-" }}
               </td>
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('how_many_pets')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 {{ row.how_many_pets || "-" }}
               </td>
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('how_many_total_passengers')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 {{ row.how_many_total_passengers || "-" }}
               </td>
-              <td class="text-truncate" style="max-width: 150px">
+              <td
+                v-if="isVisible('inserted')"
+                class="text-truncate"
+                style="max-width: 150px"
+              >
                 {{ new Date(row.inserted).toISOString().split("T")[0] }}
               </td>
             </tr>
             <tr v-if="!tableData.length && this.loading">
-              <td colspan="14"><i class="fa fa-refresh fa-spin fa-2x fa-fw"></i>Loading...</td>
+              <td colspan="14">
+                <i class="fa fa-refresh fa-spin fa-2x fa-fw"></i>Loading...
+              </td>
             </tr>
             <tr v-if="!tableData.length && !this.loading">
               <td colspan="14">No records found</td>
@@ -204,6 +210,21 @@
           </tbody>
         </table>
       </div>
+      <nav aria-label="paginator">
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <a class="page-link" @click.prevent="navigateB">Previous</a>
+          </li>
+          <li class="page-item">
+            <span class="page-link"
+              >page {{ currentPage }} of {{ totalPages }}</span
+            >
+          </li>
+          <li class="page-item">
+            <a class="page-link" @click.prevent="navigateF">Next</a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </template>
@@ -216,13 +237,120 @@ export default {
       tableDataRaw: [],
       filterOption: "",
       filterValue: "",
+      currentPage: 1,
+      perPage: 30,
+      totalPages: 1,
+      sort: {
+        field: "",
+        order: "",
+      },
       contact: {},
       loading: false,
+      columns: [
+        {
+          field: "transpo_form_link",
+          title: "I can Help!",
+          visibility: true,
+          fixed: true,
+        },
+        {
+          field: "current_address",
+          title: "Current Location",
+          visibility: true,
+        },
+        {
+          field: "community_center_address",
+          title: "Community Center",
+          visibility: true,
+        },
+        {
+          field: "original_city",
+          title: "Orig. City",
+          visibility: true,
+          sortable: true,
+        },
+        {
+          field: "preferable_final_location",
+          title: "Final Destination",
+          visibility: true,
+          sortable: true,
+        },
+        {
+          field: "optional_final_location",
+          title: "Optional Destination",
+          visibility: true,
+        },
+        {
+          field: "language",
+          title: "Language",
+          visibility: true,
+        },
+        {
+          field: "pay_transportation",
+          title: "Can pay for transport",
+          visibility: true,
+        },
+        {
+          field: "how_many_cars_seats",
+          title: "Car Seats",
+          visibility: true,
+        },
+        {
+          field: "how_many_kids",
+          title: "Kids",
+          visibility: true,
+        },
+        {
+          field: "how_many_pets",
+          title: "Pets",
+          visibility: true,
+        },
+        {
+          field: "how_many_total_passengers",
+          title: "Total Passengers",
+          visibility: true,
+        },
+        {
+          field: "inserted",
+          title: "Requested",
+          visibility: true,
+        },
+      ],
     };
   },
   computed: {
+    visibleColumns() {
+      return this.columns.filter((column) => column.visibility);
+    },
     tableData() {
-      return this.filterTable(this.tableDataRaw);
+      let filteredSortedData = !this.sort.field
+        ? this.filterTable(this.tableDataRaw)
+        : this.filterTable(this.tableDataRaw).sort((a, b) => {
+            if (this.sort.order === "desc") {
+              if (a[this.sort.field] > b[this.sort.field]) return 1;
+              if (a[this.sort.field] < b[this.sort.field]) return -1;
+            } else {
+              if (a[this.sort.field] > b[this.sort.field]) return -1;
+              if (a[this.sort.field] < b[this.sort.field]) return 1;
+            }
+          });
+      this.totalPages = Math.ceil(filteredSortedData.length / this.perPage) || 1;
+      return this.currentPage === this.totalPages
+        ? filteredSortedData.slice(
+            this.currentPage <= 1
+              ? this.currentPage - 1
+              : this.perPage * (this.currentPage - 1),
+            filteredSortedData.length
+          )
+        : filteredSortedData.slice(
+            this.currentPage - 1,
+            this.currentPage <= 1
+              ? this.perPage
+              : this.perPage * this.currentPage
+          );
+    },
+    tableHeight() {
+      return `height:${window.innerHeight - 186}px; !important`;
     },
   },
   methods: {
@@ -232,8 +360,60 @@ export default {
       const response = await this.$axios.get(
         "https://sc-ukraine.ndmglobal.com/api/execute/all-refugees"
       );
-      this.tableDataRaw = response.results;
+      this.tableDataRaw = response.results || [];
       this.loading = false;
+    },
+    navigateB() {
+      this.currentPage =
+        this.currentPage === 1 ? this.currentPage : this.currentPage - 1;
+    },
+    navigateF() {
+      console.log(
+        this.currentPage === this.totalPages
+          ? this.currentPage
+          : this.currentPage + 1
+      );
+      this.currentPage =
+        this.currentPage === this.totalPages
+          ? this.currentPage
+          : this.currentPage + 1;
+    },
+    toggleColumnVisibility(col) {
+      if (col.fixed) {
+        return;
+      }
+      this.columns = this.columns.map((column) => {
+        if (column.field === col.field) {
+          column.visibility = !column.visibility;
+        }
+        return column;
+      });
+    },
+    isVisible(field) {
+      return this.columns.find((column) => column.field === field).visibility;
+    },
+    sortableClass(field) {
+      return this.sort.field === field ? this.sort.order : "none";
+    },
+    sortBy(field) {
+      if (this.sort.field === field) {
+        if (this.sort.order === "asc") {
+          this.sort = {
+            field: "",
+            order: "",
+          };
+        } else {
+          this.sort = {
+            field: field,
+            order: "asc",
+          };
+        }
+      } else {
+        this.sort = {
+          field: field,
+          order: "desc",
+        };
+      }
     },
     filterTable(datatable) {
       return datatable.filter((row) => {
@@ -300,5 +480,63 @@ td {
   color: #0a53be;
   text-decoration: underline;
   cursor: pointer;
+}
+.fixTableHead {
+  overflow-y: auto;
+}
+.fixTableHead thead th {
+  border-bottom: 2px solid;
+  background-color: white;
+  position: sticky;
+  top: 0;
+}
+.table > :not(:first-child) {
+  border-top: none;
+}
+th a.sort-by {
+  padding-right: 18px;
+  position: relative;
+}
+a.sort-by:before,
+a.sort-by:after {
+  border: 4px solid transparent;
+  content: "";
+  display: block;
+  height: 0;
+  right: 5px;
+  top: 50%;
+  position: absolute;
+  width: 0;
+}
+a.sort-by.none:before {
+  border-bottom-color: #666;
+  margin-top: -9px;
+}
+a.sort-by.none:after {
+  border-top-color: #666;
+  margin-top: 1px;
+}
+a.sort-by.asc:before {
+  border-bottom-color: #666;
+  margin-top: -9px;
+}
+a.sort-by.desc:after {
+  border-top-color: #666;
+  margin-top: 1px;
+}
+.page-link {
+  cursor: pointer;
+}
+.dropdown-menu li {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid lightgray;
+  cursor: pointer;
+}
+.dropdown-menu li.disabled {
+  color: lightgray;
+  cursor: not-allowed;
+}
+.dropdown-menu li input {
+  margin-right: 1rem;
 }
 </style>
