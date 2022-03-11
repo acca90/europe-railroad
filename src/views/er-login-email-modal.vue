@@ -1,11 +1,11 @@
 <template>
   <div
-    class="modal static fade"
-    id="staticBackdrop"
-    tabindex="-1"
-    data-bs-backdrop="static"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
+      class="modal static fade"
+      id="staticBackdrop"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -14,61 +14,54 @@
             {{ txt.headerText }}
           </h5>
           <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-            v-on:click="resetModal"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              v-on:click="resetModal"
           ></button>
         </div>
 
-        <!--   Body & footer for SignIn        -->
+        <!--  SignIn        -->
         <div class="modal-body" v-if="!signUp">
           <div class="container">
             <form class="text-left">
               <div class="mb-3" v-if="!loading">
                 <label for="exampleInputEmail1" class="form-label">{{
-                  txt.email
-                }}</label>
+                    txt.email
+                  }}</label>
                 <input
-                  type="email"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  placeholder="your@email.com"
-                  aria-describedby="emailHelp"
-                  v-model="formSignIn.email"
+                    type="email"
+                    class="form-control"
+                    id="exampleInputEmail1"
+                    placeholder="your@email.com"
+                    aria-describedby="emailHelp"
+                    v-model="formSignIn.email"
                 />
               </div>
               <div class="mb-3" v-if="forgotpass && !loading">
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  v-on:click.prevent="sendForgotPasswordEmail"
-                >
-                  <i class="fa fa-sign-in"></i>
-                  {{ txt.sendMail }}
-                </button>
+
               </div>
               <div class="mb-3" v-if="!forgotpass && !loading">
                 <label for="exampleInputPassword1" class="form-label">{{
-                  txt.password
-                }}</label>
+                    txt.password
+                  }}</label>
                 <input
-                  type="password"
-                  class="form-control"
-                  id="exampleInputPassword1"
-                  v-model="formSignIn.password"
+                    type="password"
+                    class="form-control"
+                    id="exampleInputPassword1"
+                    v-model="formSignIn.password"
                 />
                 <a href="" v-on:click.prevent="forgotpass = true">{{
-                  txt.forgotPass
-                }}</a>
+                    txt.forgotPass
+                  }}</a>
               </div>
               <div class="mb-3">
                 <div
-                  v-if="error"
-                  class="alert"
-                  :class="alert_class"
-                  role="alert"
+                    v-if="error"
+                    class="alert"
+                    :class="alert_class"
+                    role="alert"
                 >
                   <i class="fa fa-warning"></i>
                   {{ error }}
@@ -80,34 +73,52 @@
             </form>
           </div>
         </div>
-        <div class="modal-footer" v-if="!signUp">
+        <div class="modal-footer" v-if="!signUp && !forgotpass">
           <button
-            type="submit"
-            class="btn btn-primary"
-            v-on:click="validateSighIn"
+              type="submit"
+              class="btn btn-primary"
+              v-on:click="validateSighIn"
           >
             <i class="fa fa-sign-in"></i>
             {{ txt.signIn }}
           </button>
 
           <button
-            type="submit"
-            class="btn btn-secondary"
-            v-on:click="signUpForm"
+              type="submit"
+              class="btn btn-secondary"
+              v-on:click="signUpForm"
           >
             <i class="fa fa-user-plus"></i>
             {{ txt.signUp }}
           </button>
 
           <button
-            type="button"
-            class="btn btn-danger"
-            data-bs-dismiss="modal"
-            v-on:click="resetModal"
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+              v-on:click="resetModal"
           >
             <i class="fa fa-remove"></i>
             {{ txt.close }}
           </button>
+        </div>
+        <div class="modal-footer" v-if="forgotpass">
+         <button
+                    type="submit"
+                    class="btn btn-primary"
+                    v-on:click.prevent="sendForgotPasswordEmail"
+                >
+                  <i class="fa fa-sign-in"></i>
+                  {{ txt.sendMail }}
+                </button>
+          <button
+                    type="submit"
+                    class="btn btn-secondary"
+                    v-on:click.prevent="resetModal"
+                >
+                  <i class="fa fa-sign-in"></i>
+                  {{ txt.back }}
+                </button>
         </div>
 
         <!--  Body & footer for SignUp        -->
@@ -116,56 +127,57 @@
             <form class="text-left">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">{{
-                  txt.email
-                }}</label>
+                    txt.email
+                  }}</label>
                 <input
-                  type="email"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  placeholder="your@email.com"
-                  aria-describedby="emailHelp"
-                  v-model="formSignUp.email"
+                    type="email"
+                    class="form-control"
+                    id="exampleInputEmail1"
+                    placeholder="your@email.com"
+                    aria-describedby="emailHelp"
+                    v-model="formSignUp.email"
                 />
               </div>
               <div class="mb-3">
-                <label for="password" class="form-label">{{
-                  txt.password
-                }}</label>
+                <label for="inputPassword" class="form-label">{{
+                    txt.password
+                  }}</label>
                 <input
-                  type="password"
-                  class="form-control"
-                  id="inputPassword"
-                  v-model="formSignUp.password"
+                    type="password"
+                    class="form-control"
+                    id="inputPassword"
+                    v-model="formSignUp.password"
                 />
               </div>
               <div class="mb-3">
-                <label for="firstName" class="form-label">{{
-                  txt.firstName
-                }}</label>
+                <label for="inputFirstName" class="form-label">{{
+                    txt.firstName
+                  }}</label>
                 <input
-                  type="text"
-                  class="form-control"
-                  id="inputFirstName"
-                  v-model="formSignUp.firstName"
+                    type="text"
+                    class="form-control"
+                    id="inputFirstName"
+                    v-model="formSignUp.firstName"
                 />
               </div>
               <div class="mb-3">
-                <label for="lastName" class="form-label">{{
-                  txt.lastName
-                }}</label>
+                <label for="inputLastName" class="form-label">{{
+                    txt.lastName
+                  }}</label>
                 <input
-                  type="text"
-                  class="form-control"
-                  id="inputLastName"
-                  v-model="formSignUp.lastName"
+                    type="text"
+                    class="form-control"
+                    id="inputLastName"
+                    v-model="formSignUp.lastName"
                 />
               </div>
 
               <div class="mb-3 form-check">
                 <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="checkbox"
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="checkbox"
+                    id="flexCheckChecked"
                 />
                 <label class="form-check-label" for="flexCheckChecked">
                   {{ txt.checkbox }}
@@ -174,10 +186,10 @@
 
               <div class="mb-3">
                 <div
-                  v-if="error"
-                  class="alert"
-                  :class="alert_class"
-                  role="alert"
+                    v-if="error"
+                    class="alert"
+                    :class="alert_class"
+                    role="alert"
                 >
                   <i class="fa fa-warning"></i>
                   {{ error }}
@@ -187,17 +199,17 @@
           </div>
         </div>
         <div class="modal-footer" v-if="signUp">
+           <button type="submit" class="btn btn-primary" v-on:click="submitForm">
+            <i class="fa fa-sign-in"></i>
+            {{ txt.submit }}
+          </button>
           <button
-            type="submit"
-            class="btn btn-secondary"
-            v-on:click="cleanSignUpForm"
+              type="submit"
+              class="btn btn-secondary"
+              v-on:click="cleanSignUpForm"
           >
             <i class="fa fa-sign-in"></i>
             {{ txt.back }}
-          </button>
-          <button type="submit" class="btn btn-primary" v-on:click="submitForm">
-            <i class="fa fa-sign-in"></i>
-            {{ txt.submit }}
           </button>
         </div>
       </div>
@@ -206,7 +218,8 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapState} from "vuex";
+
 export default {
   name: "er-login-email",
   data() {
@@ -232,6 +245,10 @@ export default {
         back: "Back",
         submit: "Submit",
         formAlert: "You must fill in all the fields",
+        forgotPasswordError: "Something went wrong",
+        forgotPasswordSuccess: "Email sent",
+        signUpError: "Something went wrong",
+        signUpSuccess: "Registration success",
       },
       formSignUp: {
         firstName: "",
@@ -253,12 +270,18 @@ export default {
       this.cleanSignUpForm();
       this.forgotpass = !this.forgotpass;
     },
+    forgotPasswordHandler(resp) {
+      if (resp) {
+        this.alert(this.txt.forgotPasswordError, "alert-warning");
+      } else {
+        this.alert(this.txt.forgotPasswordSuccess, "alert-success");
+      }
+    },
     sendForgotPasswordEmail() {
       this.loading = true;
+      this.auth.forgotPassword(this.formSignIn.email, this.forgotPasswordHandler);
       setTimeout(() => {
         this.loading = false;
-
-        this.resetModal();
       }, 2.0 * 1000);
     },
     resetModal() {
@@ -268,11 +291,11 @@ export default {
     },
     submitForm() {
       if (
-        this.formSignUp.firstName &&
-        this.formSignUp.lastName &&
-        this.formSignUp.email &&
-        this.formSignUp.password &&
-        this.checkbox
+          this.formSignUp.firstName &&
+          this.formSignUp.lastName &&
+          this.formSignUp.email &&
+          this.formSignUp.password &&
+          this.checkbox
       ) {
         this.auth.signUp(this.formSignUp, this.signUpHandler);
       } else {
@@ -280,12 +303,11 @@ export default {
       }
     },
     signUpHandler(resp) {
-      console.log(resp);
-      // if (resp.statusCode == 200) {
-      //   this.alert(resp.description, "alert-success");
-      // } else {
-      //   this.alert(resp.description, "alert-warning");
-      // }
+      if (resp) {
+        this.alert(this.txt.signUpError, "alert-warning");
+      } else {
+        this.alert(this.txt.signUpSuccess, "alert-success");
+      }
     },
     alert(message, type) {
       this.alert_class = type;
@@ -338,30 +360,38 @@ h1 {
   padding-bottom: 10px;
   border-bottom: solid 1px #c0c0c0;
 }
+
 .help {
   width: 300px;
   height: unset;
   border-radius: unset;
   margin-bottom: 25px;
 }
+
 button.custom-margin {
   margin: 5px;
 }
+
 div.custom-margin {
   margin-top: 15px;
 }
+
 p {
   text-align: justify;
 }
+
 .mt-minus-top {
   margin-top: -25px;
 }
+
 small {
   font-size: 10px;
 }
+
 .text-left {
   text-align: left;
 }
+
 a {
   text-decoration: none;
 }
