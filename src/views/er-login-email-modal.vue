@@ -126,13 +126,13 @@
           <div class="container">
             <form class="text-left">
               <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">{{
+                <label for="exampleInputEmailsg" class="form-label">{{
                     txt.email
                   }}</label>
                 <input
                     type="email"
                     class="form-control"
-                    id="exampleInputEmail1"
+                    id="exampleInputEmailsg"
                     placeholder="your@email.com"
                     aria-describedby="emailHelp"
                     v-model="formSignUp.email"
@@ -248,7 +248,7 @@ export default {
         forgotPasswordError: "Something went wrong",
         forgotPasswordSuccess: "Email sent",
         signUpError: "Something went wrong",
-        signUpSuccess: "Registration success",
+        signUpSuccess: "Registration success, check your email",
       },
       formSignUp: {
         firstName: "",
