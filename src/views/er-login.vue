@@ -101,6 +101,15 @@
       </div>
     </div>
     <er-login-email></er-login-email>
+    <button
+        v-show="false"
+        id="openModalNotVerified"
+        data-bs-toggle="modal"
+        data-bs-target="#modalEmailNotVerified"
+        class="btn btn-large btn-success custom-margin" >
+      <i class="fa fa-envelope"></i>
+      Modal Not Verified
+    </button>
   </div>
 </template>
 
@@ -138,7 +147,6 @@ export default {
       this.logout().then(() => this.$router.push("/login"));
     },
     successHandler(resp) {
-      console.log(JSON.stringify(resp));
       document.cookie = `pack=${btoa(resp)}`;
       document.cookie = `givenName=${resp.idTokenPayload.name};`;
       document.cookie = `picture=${btoa(resp.idTokenPayload.picture)};`;
@@ -148,6 +156,14 @@ export default {
       window.open('https://forms.docq.app/?domain=ukraine.docq.app&form=a92a63d6-e639-4162-b3ee-dcbb1a6e286b', '_blank')
     },
   },
+  mounted() {
+    if(this.$route.params.emailNotVerified) {
+      setTimeout(function () {
+        document.getElementById('openModalNotVerified').click();
+      }, 1000);
+
+    }
+  }
 };
 </script>
 

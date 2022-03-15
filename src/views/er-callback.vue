@@ -14,7 +14,14 @@ export default {
   },
   mounted() {
     let access_token = (window.location.href.split('#')[1]).split('&')[0].split('=')[1];
-    this.login(access_token).then(() => this.$router.push("/"));
+    if( access_token != 'unauthorized' ) {
+      this.login(access_token).then(() => this.$router.push("/"));
+    } else {
+      this.$router.push({
+        name: "Login",
+        params: { emailNotVerified: 'true'}
+      });
+    }
   }
 }
 </script>
