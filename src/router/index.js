@@ -33,14 +33,14 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
-    {
-      path: "/profile",
-      name: "Profile",
-      component: erProfile,
-      meta: {
-        requiresAuth: true,
-      },
-    },
+    // {
+    //   path: "/profile",
+    //   name: "Profile",
+    //   component: erProfile,
+    //   meta: {
+    //     requiresAuth: true,
+    //   },
+    // },
     {
       path: "/",
       name: "Home",

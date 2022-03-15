@@ -136,6 +136,7 @@
                     placeholder="your@email.com"
                     aria-describedby="emailHelp"
                     v-model="formSignUp.email"
+                    :disabled="blockFieldAfterSignUp"
                 />
               </div>
               <div class="mb-3">
@@ -147,6 +148,7 @@
                     class="form-control"
                     id="inputPassword"
                     v-model="formSignUp.password"
+                    :disabled="blockFieldAfterSignUp"
                 />
               </div>
               <div class="mb-3">
@@ -158,6 +160,7 @@
                     class="form-control"
                     id="inputFirstName"
                     v-model="formSignUp.firstName"
+                    :disabled="blockFieldAfterSignUp"
                 />
               </div>
               <div class="mb-3">
@@ -169,6 +172,7 @@
                     class="form-control"
                     id="inputLastName"
                     v-model="formSignUp.lastName"
+                    :disabled="blockFieldAfterSignUp"
                 />
               </div>
 
@@ -178,6 +182,7 @@
                     type="checkbox"
                     v-model="checkbox"
                     id="flexCheckChecked"
+                    :disabled="blockFieldAfterSignUp"
                 />
                 <label class="form-check-label" for="flexCheckChecked">
                   {{ txt.checkbox }}
@@ -199,7 +204,11 @@
           </div>
         </div>
         <div class="modal-footer" v-if="signUp">
-           <button type="submit" class="btn btn-primary" v-on:click="submitForm">
+          <button type="submit" class="btn btn-success" v-if="blockFieldAfterSignUp" v-on:click="cleanSignUpForm">
+            <i class="fa fa-sign-in"></i>
+            {{ txt.ok }}
+          </button>
+           <button type="submit" class="btn btn-primary" v-if="!blockFieldAfterSignUp" v-on:click="submitForm">
             <i class="fa fa-sign-in"></i>
             {{ txt.submit }}
           </button>
@@ -207,6 +216,7 @@
               type="submit"
               class="btn btn-secondary"
               v-on:click="cleanSignUpForm"
+              v-if="!blockFieldAfterSignUp"
           >
             <i class="fa fa-sign-in"></i>
             {{ txt.back }}
@@ -249,6 +259,7 @@ export default {
         forgotPasswordSuccess: "Email sent",
         signUpError: "Something went wrong",
         signUpSuccess: "Registration success, check your email",
+        ok: 'Ok'
       },
       formSignUp: {
         firstName: "",
@@ -263,6 +274,7 @@ export default {
       signInLoading: false,
       checkbox: false,
       error: "",
+      blockFieldAfterSignUp: false
     };
   },
   methods: {
@@ -306,6 +318,7 @@ export default {
       if (resp) {
         this.alert(this.txt.signUpError, "alert-warning");
       } else {
+        this.blockFieldAfterSignUp = true;
         this.alert(this.txt.signUpSuccess, "alert-success");
       }
     },
@@ -333,6 +346,7 @@ export default {
         email: "",
         password: "",
       };
+      this.blockFieldAfterSignUp =false;
     },
     validateSighIn() {
       this.loading = true;
