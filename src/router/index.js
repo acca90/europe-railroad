@@ -3,7 +3,8 @@ import Home from "../views/er-home.vue";
 import Login from "../views/er-login.vue";
 import erFacebookCallback from "../views/er-social-callback.vue";
 import erSupport from "../views/er-support.vue";
-
+import erProfile from "../views/er-profile.vue";
+import erCallback from "../views/er-callback.vue";
 import store from "../store";
 
 const router = createRouter({
@@ -20,6 +21,11 @@ const router = createRouter({
       component: erFacebookCallback,
     },
     {
+      path: "/callback",
+      name: "Callback",
+      component: erCallback,
+    },
+    {
       path: "/support",
       name: "Support",
       component: erSupport,
@@ -27,6 +33,14 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
+    // {
+    //   path: "/profile",
+    //   name: "Profile",
+    //   component: erProfile,
+    //   meta: {
+    //     requiresAuth: true,
+    //   },
+    // },
     {
       path: "/",
       name: "Home",

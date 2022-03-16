@@ -83,6 +83,15 @@
                 <i class="fa fa-facebook"></i>
                 LOG IN WITH FACEBOOK
               </button>
+
+              <button
+                  data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop"
+                  class="btn btn-large btn-success custom-margin" >
+                <i class="fa fa-envelope"></i>
+                LOG IN WITH EMAIL
+              </button>
+
             </div>
           </div>
 
@@ -115,14 +124,26 @@
         <small> Peace. {{ new Date().getFullYear() }} </small>
       </div>
     </div>
+    <er-login-email></er-login-email>
+    <button
+        v-show="false"
+        id="openModalNotVerified"
+        data-bs-toggle="modal"
+        data-bs-target="#modalEmailNotVerified"
+        class="btn btn-large btn-success custom-margin" >
+      <i class="fa fa-envelope"></i>
+      Modal Not Verified
+    </button>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import ErLoginEmail from "./er-login-email-modal.vue";
 
 export default {
   name: "er-login",
+  components: {ErLoginEmail},
   data() {
     return {
       isLogged: false,
@@ -150,6 +171,9 @@ export default {
       this.logout().then(() => this.$router.push("/login"));
     },
     successHandler(resp) {
+      document.cookie = `pack=${btoa(resp)}`;
+      document.cookie = `givenName=${resp.idTokenPayload.name};`;
+      document.cookie = `picture=${btoa(resp.idTokenPayload.picture)};`;
       this.login(resp.accessToken).then(() => this.$router.push("/"));
     },
     iAmRefugee() {
@@ -159,6 +183,14 @@ export default {
       );
     },
   },
+  mounted() {
+    if(this.$route.params.emailNotVerified) {
+      setTimeout(function () {
+        document.getElementById('openModalNotVerified').click();
+      }, 1000);
+
+    }
+  }
 };
 </script>
 
