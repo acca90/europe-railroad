@@ -1,14 +1,11 @@
 <template>
   <div id="bg" class="container-fluid">
     <div class="row mt-minus-top">
-      <div class="col-md-2 offset-md-5 text-center">
-      </div>
+      <div class="col-md-2 offset-md-5 text-center"></div>
     </div>
     <div class="row text-center">
       <div class="col-md-12">
-        <img alt="Help Ukraine"
-             class="help"
-             src="@/assets/peace.png"/>
+        <img alt="Help Ukraine" class="help" src="@/assets/peace.png" />
       </div>
     </div>
 
@@ -23,18 +20,24 @@
             <div class="col-md-12">
               <p class="text-center">
                 <b>
-                  Для біженців, які потребують транспортування, будь ласка, натисніть кнопку нижче
+                  Для біженців, які потребують транспортування, будь ласка,
+                  натисніть кнопку нижче
                 </b>
               </p>
               <p class="text-center">
-                For refugees requiring transportation please click on the below button
+                For refugees requiring transportation please click on the below
+                button
               </p>
             </div>
           </div>
 
-          <div class="row ">
+          <div class="row">
             <div class="col-md-12">
-              <button class="btn btn-xs btn-danger" aria-current="page" v-on:click="iAmRefugee()">
+              <button
+                class="btn btn-xs btn-danger"
+                aria-current="page"
+                v-on:click="iAmRefugee()"
+              >
                 <b>I'm refugee / Я біженець</b>
               </button>
             </div>
@@ -43,29 +46,42 @@
           <div class="row custom-margin">
             <p class="text-center">
               <b>
-                Для волонтерів та людей та/або організацій, зацікавлених у допомозі українській допомоги, будь ласка, увійдіть за допомогою наведених нижче параметрів.
+                Для волонтерів та людей та/або організацій, зацікавлених у
+                допомозі українській допомоги, будь ласка, увійдіть за допомогою
+                наведених нижче параметрів.
               </b>
             </p>
             <p class="text-center">
-              For volunteers and people and/or organizations interested in helping with Ukrainian relief efforts, please login via the options below.
+              For volunteers and people and/or organizations interested in
+              helping with Ukrainian relief efforts, please login via the
+              options below.
             </p>
           </div>
 
           <div class="row custom-margin">
             <div class="col-md-12">
-              <button class="btn btn-large btn-dark custom-margin" v-on:click="logOnApple">
+              <button
+                class="btn btn-large btn-dark custom-margin"
+                v-on:click="logOnApple"
+              >
                 <i class="fa fa-apple"></i>
                 LOG IN WITH APPLE
               </button>
 
-              <button class="btn btn-large btn-primary custom-margin" v-on:click="logOnFacebook">
-                <i class="fa fa-facebook"></i>
-                LOG IN WITH FACEBOOK
-              </button>
-
-              <button class="btn btn-large btn-danger custom-margin" v-on:click="logOnGoogle">
+              <button
+                class="btn btn-large btn-danger custom-margin"
+                v-on:click="logOnGoogle"
+              >
                 <i class="fa fa-google"></i>
                 LOG IN WITH GOOGLE
+              </button>
+
+              <button
+                class="btn btn-large btn-primary custom-margin"
+                v-on:click="logOnFacebook"
+              >
+                <i class="fa fa-facebook"></i>
+                LOG IN WITH FACEBOOK
               </button>
 
               <button
@@ -82,22 +98,30 @@
           <div class="row custom-margin">
             <p class="text-center">
               <b>
-                Після того, як ви ввійдете в систему, програма дозволить вам шукати біженців, які потребують допомоги, з волонтерами в околицях для забезпечення транспорту.
+                Після того, як ви ввійдете в систему, програма дозволить вам
+                шукати біженців, які потребують допомоги, з волонтерами в
+                околицях для забезпечення транспорту.
               </b>
             </p>
             <p class="text-center">
-              Once you've logged in, the application will allow you to search for refugees needing assistance with volunteers in the surrounding area to provide transportation.
+              Once you've logged in, the application will allow you to search
+              for refugees needing assistance with volunteers in the surrounding
+              area to provide transportation.
             </p>
           </div>
-
         </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.europerailroad.transportuk">
+          <img src="@/assets/google-play.png" width="150" />
+        </a>
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <small>
-          Peace. {{ new Date().getFullYear() }}
-        </small>
+        <small> Peace. {{ new Date().getFullYear() }} </small>
       </div>
     </div>
     <er-login-email></er-login-email>
@@ -128,13 +152,13 @@ export default {
   methods: {
     ...mapActions(["login", "logout"]),
     logOnFacebook() {
-      this.auth.social('facebook', this.socialHandler);
+      this.auth.social("facebook", this.socialHandler);
     },
     logOnGoogle() {
-      this.auth.social('google-oauth2', this.socialHandler);
+      this.auth.social("google-oauth2", this.socialHandler);
     },
     logOnApple() {
-      this.auth.social('apple', this.socialHandler);
+      this.auth.social("apple", this.socialHandler);
     },
     socialHandler(errorResp, successResp) {
       if (errorResp) {
@@ -153,7 +177,10 @@ export default {
       this.login(resp.accessToken).then(() => this.$router.push("/"));
     },
     iAmRefugee() {
-      window.open('https://forms.docq.app/?domain=ukraine.docq.app&form=a92a63d6-e639-4162-b3ee-dcbb1a6e286b', '_blank')
+      window.open(
+        "https://forms.docq.app/?domain=ukraine.docq.app&form=a92a63d6-e639-4162-b3ee-dcbb1a6e286b",
+        "_blank"
+      );
     },
   },
   mounted() {
@@ -193,11 +220,5 @@ p {
 }
 small {
   font-size: 10px;
-}
-.text-left {
-  text-align: left;
-}
-a {
-  text-decoration: none;
 }
 </style>
